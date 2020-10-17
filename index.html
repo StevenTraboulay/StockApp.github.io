@@ -18,9 +18,16 @@
           <span class="mdc-top-app-bar__title">Stock Screener</span>
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Favorite">favorite</button>
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search">search</button>
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Options">more_vert</button>
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Favorite" id='add-to-watchlist'>favorite</button>
+          <label class="mdc-text-field mdc-text-field--filled">
+            <span class="mdc-text-field__ripple"></span>
+            <input class="mdc-text-field__input" type="text" aria-labelledby="stock-input" placeholder='Stock Ticker'>
+            <span class="mdc-floating-label" id="stock-input"></span>
+            <span class="mdc-line-ripple"></span>
+          </label>
+          
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search" id='stock-search'>search</button>
+          <!-- <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Options">more_vert</button> -->
         </section>
       </div>
     </header>
@@ -51,6 +58,7 @@
 
       </div>
       <footer>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src='./assets/js/materials.js'></script>
         <script src='./assets/js/script.js'></script>
       </footer>
