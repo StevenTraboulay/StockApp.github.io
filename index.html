@@ -5,7 +5,7 @@
         <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
         <link rel="icon" type="image/png" href="./assets/img/favicon.png"/>
         <link rel='stylesheet' href='./assets/css/style.css'>
-        <link rel='stylesheet' href='https://unpkg.com/@material-ui/core@latest/umd/material-ui.production.min.js'>
+        <!--<link rel='stylesheet' href='https://unpkg.com/@material-ui/core@latest/umd/material-ui.production.min.js'>-->
         <title>Stock Screener</title>
     </head>
     <body>
@@ -16,12 +16,12 @@
         <div class="content row">
           <div class='left-bar'>
             <div class='search-bar'>
-              <div class="input-group">
+              <form id="input-group" class="input-group">
                 <input type="text" id='stock-input' placeholder="Provide a symbol" aria-label="Search for a stock">
                 <div class="input-group-append">
-                  <button type="button" id='stock-search'>Search</button>
+                  <button type="submit" id='stock-search'>Search</button>
                 </div>
-              </div>
+              </form>
             </div>
             <ul id="stock-history">
                 <li> stock 1 </li>
@@ -37,4 +37,8 @@
           </div>
 
         </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="./assets/js/script.js"></script>
 </html>
