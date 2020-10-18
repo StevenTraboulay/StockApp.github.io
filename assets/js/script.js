@@ -2,24 +2,12 @@
 var stockSubmit = document.querySelector("#input-group");
 var outerStockContainerEl = document.querySelector("#stock-info");
 var outerStockContainerNameEl = document.querySelector("#stock-ticker-name");
-var outerStockContainerCompanyNameEl = document.querySelector(
-  "#stock-company-name"
-);
-var outerStockContainerOpeningPriceEl = document.querySelector(
-  "#stock-open-price"
-);
-var outerStockContainerCurrentPriceEl = document.querySelector(
-  "#stock-last-price"
-);
-var outerStockContainerChangePercentEl = document.querySelector(
-  "#stock-change-percent"
-);
-var outerStockContainerAbsoluteEl = document.querySelector(
-  "#stock-change-absolute"
-);
-var outerStockContainerMarketCapEl = document.querySelector(
-  "#stock-market-cap"
-);
+var outerStockContainerCompanyNameEl = document.querySelector("#stock-company-name");
+var outerStockContainerOpeningPriceEl = document.querySelector("#stock-open-price");
+var outerStockContainerCurrentPriceEl = document.querySelector("#stock-last-price");
+var outerStockContainerChangePercentEl = document.querySelector("#stock-change-percent");
+var outerStockContainerAbsoluteEl = document.querySelector("#stock-change-absolute");
+var outerStockContainerMarketCapEl = document.querySelector("#stock-market-cap");
 
 //This executes when the event listener kicks off to handle the button click
 var formSubmitHandler = function (event) {
@@ -175,12 +163,9 @@ var displayMarketCap = function (data) {
   };
 
   var marketCapFormatted = marketCapIterate(marketCap, 0);
-  var companyNameEl = (document.createElement("div").innerHTML =
-    "<h2>" + companyName + "</h2>");
+  outerStockContainerNameEl.innerHTML = "<h2>" + companyName + "</h2>";
   var marketCapEl = document.createElement("div");
   marketCapEl.textContent = "Market Cap: $ " + marketCapFormatted;
-  outerStockContainerEl.innerHTML =
-    companyNameEl + outerStockContainerEl.innerHTML;
   outerStockContainerMarketCapEl.appendChild(marketCapEl);
 };
 
