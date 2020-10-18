@@ -20,18 +20,22 @@ var formSubmitHandler = function (event) {
     var clearInput = document.querySelector("#stock-input");
     clearInput.value = "";
   } else {
-    alert("Enter a correct Symbol!");
+    outerStockContainerEl.classList.add("blink_text");
+    outerStockContainerEl.textContent = "Symbol does not exist";
   }
 };
+
 //clear containers
 var clearOut = function () {
-  outerStockContainerNameEl.textContent = "";
-  outerStockContainerCompanyNameEl.textContent = "";
-  outerStockContainerOpeningPriceEl.textContent = "";
-  outerStockContainerCurrentPriceEl.textContent = "";
-  outerStockContainerChangePercentEl.textContent = "";
-  outerStockContainerAbsoluteEl.textContent = "";
-  outerStockContainerMarketCapEl.textContent = "";
+    outerStockContainerEl.classList.remove("blink_text");
+    outerStockContainerEl.textContent = "";
+    outerStockContainerNameEl.textContent = "";
+    outerStockContainerCompanyNameEl.textContent = "";
+    outerStockContainerOpeningPriceEl.textContent = "";
+    outerStockContainerCurrentPriceEl.textContent = "";
+    outerStockContainerChangePercentEl.textContent = "";
+    outerStockContainerAbsoluteEl.textContent = "";
+    outerStockContainerMarketCapEl.textContent = "";
 };
 
 //fetch call for stockdata from API
@@ -48,7 +52,7 @@ var getStockData = function (stockInput) {
           displayStockData(data, stockInput);
         });
       } else {
-        alert("No Stock Data Returned: " + response.statusText);
+        outerStockContainerEl.textContent = "No Stock Data Returned: " + response.statusText;
       }
     });
 };
@@ -66,7 +70,7 @@ var getMarketCap = function (stockInput) {
           displayMarketCap(data);
         });
       } else {
-        alert("No Market Cap Returned " + response.statusText);
+        outerStockContainerEl.textContent = "No Stock Data Returned: " + response.statusText;
       }
     });
 };
