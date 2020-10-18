@@ -1,7 +1,8 @@
 //Initiated Variables
 var stockSubmit = document.querySelector("#input-group");
 var outerStockContainerEl = document.querySelector("#stock-info");
-var outerStockContainerNameEl = document.querySelector("#stock-name");
+var outerStockContainerNameEl = document.querySelector("#stock-ticker-name");
+var outerStockContainerCompanyNameEl = document.querySelector("#stock-company-name");
 var outerStockContainerOpeningPriceEl = document.querySelector("#stock-open-price");
 var outerStockContainerCurrentPriceEl = document.querySelector("#stock-last-price");
 var outerStockContainerChangePercentEl = document.querySelector("#stock-change-percent");
@@ -25,6 +26,7 @@ var formSubmitHandler = function(event){
 
 var clearOut = function(){
     outerStockContainerNameEl.textContent = "";
+    outerStockContainerCompanyNameEl.textContent="";
     outerStockContainerOpeningPriceEl.textContent = "";
     outerStockContainerCurrentPriceEl.textContent = "";
     outerStockContainerChangePercentEl.textContent = "";
@@ -66,13 +68,14 @@ var getMarketCap = function(stockInput){
 
 
 var displayStockData = function(data, stockInput){
+    console.log(data)
 
     //check if api returned any repos
     if(data.length === 0){
         outerStockContainerEl.textContent = "No repos found, try again";
         return;
     }
-        //get stock name
+        //get symbol name
         var stockName = stockInput;
         var StockNameEl = document.createElement("div");
         StockNameEl.textContent = "Ticker: " + stockName.toUpperCase();
@@ -137,7 +140,11 @@ var displayStockData = function(data, stockInput){
 
 var displayMarketCap = function(data){
     var marketCap = data.MarketCapitalization;
+    var companyName = data['Name'];
+    // Could add in things like description, PE, exchange, others from here
 
+
+    // Recursive loop for determining the post-fix for market cap according to the stock's valuation.
     var marketCapIterate = function(data, counter) {
         data = parseInt(data);
         var testVal = data/1000
@@ -152,8 +159,10 @@ var displayMarketCap = function(data){
     }
 
     var marketCapFormatted = marketCapIterate(marketCap, 0);
+    var companyNameEl = document.createElement("div").innerHTML = '<h2>'+companyName+'</h2>'
     var marketCapEl = document.createElement("div");
     marketCapEl.textContent = "Market Cap: $ " + marketCapFormatted;
+    outerStockContainerEl.innerHTML = companyNameEl+outerStockContainerEl.innerHTML;
     outerStockContainerMarketCapEl.appendChild(marketCapEl);
 }
 
