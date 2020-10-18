@@ -123,7 +123,7 @@ var displayStockData = function (data, stockInput) {
   absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
   var absoluteGrowthEl = document.createElement("div");
   if (absoluteGrowth < 1) {
-    absoluteGrowthEl.textContent = "Change: " + absoluteGrowth + " cents";
+    absoluteGrowthEl.textContent = "Change: " + absoluteGrowth + " dollars";
   } else {
     absoluteGrowthEl.textContent = "Change: $" + absoluteGrowth;
   }
@@ -163,10 +163,8 @@ var displayMarketCap = function (data) {
   };
 
   var marketCapFormatted = marketCapIterate(marketCap, 0);
-  outerStockContainerNameEl.innerHTML = "<h2>" + companyName + "</h2>";
-  var marketCapEl = document.createElement("div");
-  marketCapEl.textContent = "Market Cap: $ " + marketCapFormatted;
-  outerStockContainerMarketCapEl.appendChild(marketCapEl);
+  outerStockContainerCompanyNameEl.innerHTML = companyName;
+  outerStockContainerMarketCapEl.innerHTML = "Market Cap: $ " + marketCapFormatted;
 };
 
 //On click form submit even handler

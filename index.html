@@ -9,35 +9,36 @@
         <title>Stock Screener</title>
     </head>
     <body>
-        <header >
-          <h1>Stock Screener</h1>
-          <p>Get and visualize stocks data</p>
+        <header class='navbar'>
+          <h1 class='title is-1 navbar-brand'>Stock Screener</h1>
+          <div class='search-bar navbar-item navbar-end'>
+            <form id="input-group" class="input-group">
+              <input type="text" id='stock-input' placeholder="Provide a symbol" aria-label="Search for a stock">
+              <button type="submit" id='stock-search'>Search</button>
+            </form>
+          </div>
         </header>
-        <div class="content row">
-          <div class='left-bar'>
-            <div class='search-bar'>
-              <form id="input-group" class="input-group">
-                <input type="text" id='stock-input' placeholder="Provide a symbol" aria-label="Search for a stock">
-                <div class="input-group-append">
-                  <button type="submit" id='stock-search'>Search</button>
-                </div>
-              </form>
-            </div>
-            <ul id="stock-history">
-                <li> stock 1 </li>
-                <li> stock 2 </li>
-            </ul>
-          </div>
-          <div id='stock-info'>
-              <div id='stock-company-name'></div>
-              <div id='stock-ticker-name'></div>
-              <div id='stock-open-price'></div>
-              <div id='stock-last-price'></div>
-              <div id='stock-change-percent'></div>
-              <div id='stock-change-absolute'></div>
-              <div id='stock-market-cap'></div>
-          </div>
+        <div class='history'>
+          <ul id="stock-history">
+              <li> stock 1 </li>
+              <li> stock 2 </li>
+          </ul>
+        </div>
+
+        
+        <div id='stock-info'>
+            <div id='stock-company-name' class='title is-3'></div>
+            <div id='stock-ticker-name' class='subtitle is-5'></div>
+            <div id='stock-open-price'></div>
+            <div id='stock-last-price'></div>
+            <div id='stock-change-percent'></div>
+            <div id='stock-change-absolute'></div>
+            <div id='stock-market-cap'></div>
+        </div>
+      </body>
+      <footer>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="./assets/js/currency.min.js"></script>
         <script src="./assets/js/script.js"></script>
+      </footer>
 </html>
