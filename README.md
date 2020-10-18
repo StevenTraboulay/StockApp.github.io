@@ -50,14 +50,15 @@ ISSUES
 1) cannot pull price from the API in the way we want as it pulls the price opena and close for that moment in time.
 Fix: get the last refresh time as variable and get last refreh variable but need to get day open price
 (note: dont hardcode the query name)
-    1)a) need to mathematically determine which one was the earliest one in the day
-    1)b)get the lastrefreshed time create that variable which is pulled from API
-    1)c)then get current closed price variable which is returned data using lastrefreshed time
-    1)d)create a variable list of times data array using Object.keys
-    1)e) use .sort fort he listoftimes variable
-    1)f)create a new variable called openingTime = listofTimes[0]; which allows us to start from the begining of the array 
-    1)g)created a new variable to get open stock price by using open time
-    1)h) craeted growth and percentage variables based of open stock price and percentage
-
+    1. a) need to mathematically determine which one was the earliest one in the day
+    1. b)get the lastrefreshed time create that variable which is pulled from API
+    1. c)then get current closed price variable which is returned data using lastrefreshed time
+    1. d)create a variable list of times data array using Object.keys
+    1. e) use .sort fort he listoftimes variable
+    1. f)create a new variable called openingTime = listofTimes[0]; which allows us to start from the begining of the array 
+    1. g)created a new variable to get open stock price by using open time
+    1. h) craeted growth and percentage variables based of open stock price and percentage
+2) API Problem:
+    2. a) the API is limited to 
 
 
