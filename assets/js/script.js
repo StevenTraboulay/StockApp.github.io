@@ -49,6 +49,7 @@ var getMarketCap = function(stockInput){
     //var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=443d53b576fbee38c5cf0db4dbe2ff2b";
     var ApiKey = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=EME3FI6FSOTMXXLD";
     fetch(ApiKey)
+    .then(res=> res.json())
     .then(function(response){
         if(response.ok){
             response.json()
@@ -88,7 +89,7 @@ var displayStockData = function(data, stockInput){
         currentClosePriceEl.textContent = "Current Price: " + currentClosePrice;
 
 
-        //objects.keys returns an array of all the keys from the data [time Series]
+        //Objects.keys returns an array of all the keys from the data [time Series]
         var listOfTimes = Object.keys(data['Time Series (5min)']);
         console.log(listOfTimes)
         //sorting the data returned and the default is asc alphabitcally
