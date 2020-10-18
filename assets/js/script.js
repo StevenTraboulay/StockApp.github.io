@@ -24,7 +24,6 @@ var formSubmitHandler = function(event){
 }
 
 var clearOut = function(){
-    //outerStockContainerEl.textContent = "";
     outerStockContainerNameEl.textContent = "";
     outerStockContainerOpeningPriceEl.textContent = "";
     outerStockContainerCurrentPriceEl.textContent = "";
@@ -67,7 +66,6 @@ var getMarketCap = function(stockInput){
 
 
 var displayStockData = function(data, stockInput){
-    console.log(data);
 
     //check if api returned any repos
     if(data.length === 0){
@@ -89,7 +87,7 @@ var displayStockData = function(data, stockInput){
         var currentClosePriceEl = document.createElement("div");
         currentClosePriceEl.textContent = "Current Price: $" + currentClosePrice;
 
-        //objects.keys returns an array of all the keys from the data [time Series]
+        //Objects.keys returns an array of all the keys from the data [time Series]
         var listOfTimes = Object.keys(data['Time Series (5min)']);
 
         //sorting the data returned and the default is asc alphabitcally
