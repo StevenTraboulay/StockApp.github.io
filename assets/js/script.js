@@ -36,6 +36,7 @@ var clearOut = function(){
 var getStockData = function(stockInput){
     var ApiKey = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=5min&apikey=EME3FI6FSOTMXXLD";
     fetch(ApiKey)
+    .then(res => res)
     .then(function(response){
         if(response.ok){
             response.json()
@@ -43,7 +44,7 @@ var getStockData = function(stockInput){
                 displayStockData(data, stockInput);
             });
         }else{
-            alert("Error Returned: " + response.statusText);
+            alert("No Stock Data Returned: " + response.statusText);
         }
     })
 };
@@ -51,20 +52,22 @@ var getStockData = function(stockInput){
 var getMarketCap = function(stockInput){
     var ApiKey = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=EME3FI6FSOTMXXLD";
     fetch(ApiKey)
+    .then(res => res)
     .then(function(response){
         if(response.ok){
             response.json()
             .then(function(data){
-                displayMarketCap(data);
+                displayMarketCap(data);    
             });
         }else{
-            alert("Error Returned: " + response.statusText);
+            alert("No Market Cap Returned " + response.statusText);
         }
     })
 };
 
 
 var displayStockData = function(data, stockInput){
+    console.log(data);
 
     //check if api returned any repos
     if(data.length === 0){
@@ -141,7 +144,7 @@ var displayMarketCap = function(data){
     marketCap = marketCap.split("");
     marketCap = marketCap[0] + marketCap[1] + marketCap[2];
 
-    //3rd part library to convery to currency
+    //3rd part library to convert to currency
     marketCap = currency(marketCap);
 
     var marketCapEl = document.createElement("div");
