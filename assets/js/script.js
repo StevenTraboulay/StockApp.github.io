@@ -138,18 +138,27 @@ var displayStockData = function(data, stockInput){
 var displayMarketCap = function(data){
     var marketCap = data.MarketCapitalization;
 
-    //The marketCap split may cause issues with the output of the data, there seems to be a delay in the marketCap
-    marketCap = marketCap.split("");
-    marketCap = marketCap[0] + marketCap[1] + marketCap[2];
+    var marketCapIterate = function(data, counter) {
+        data = parseInt(data);
+        var testVal = data/1000
+        if (testVal > 999) {
+            return marketCapIterate(data/1000, counter+1)
+        }
+        else {
+            caps = {0:' Thousand', 1:' Million', 2:' Billion', 3:' Trillion'}
+            var returnVal = testVal.toString()+caps[counter];
+            return (returnVal.toString())
+        }
+    }
 
-    //3rd part library to convert to currency
-    marketCap = currency(marketCap);
-
+    var marketCapFormatted = marketCapIterate(marketCap, 0);
     var marketCapEl = document.createElement("div");
-    marketCapEl.textContent = "Market Cap: $ " + marketCap;
+    marketCapEl.textContent = "Market Cap: $ " + marketCapFormatted;
     outerStockContainerMarketCapEl.appendChild(marketCapEl);
 }
 
 
 //On click form submit even handler
 stockSubmit.addEventListener("submit", formSubmitHandler);
+
+

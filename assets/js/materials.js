@@ -21,3 +21,4 @@ document.querySelector('#stock-search').addEventListener('click', function() {
         console.log(searchClick);
     }
 })
+
