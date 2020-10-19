@@ -39,7 +39,7 @@ Java Scripting
 5) create variables to open the openingprice, currentprice, change percentage and market cap to append into DIV
 6) append into DIV
 *** Issue came up but found fix and resolution***
-7) Maret cap issue wasnt displaying well, was able to input a new return data point to allow it to flow through
+7) Market cap issue wasnt displaying well, was able to input a new return data point to allow it to flow through
 8) fixed the percetange returns and prolonged 0.%
 
 
