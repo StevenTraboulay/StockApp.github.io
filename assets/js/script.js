@@ -20,26 +20,28 @@ var formSubmitHandler = function (event) {
     var clearInput = document.querySelector("#stock-input");
     clearInput.value = "";
   } else {
-    alert("Enter a correct Symbol!");
+    outerStockContainerEl.classList.add("blink_text");
+    outerStockContainerEl.textContent = "Symbol does not exist";
   }
 };
+
 //clear containers
 var clearOut = function () {
-  outerStockContainerNameEl.textContent = "";
-  outerStockContainerCompanyNameEl.textContent = "";
-  outerStockContainerOpeningPriceEl.textContent = "";
-  outerStockContainerCurrentPriceEl.textContent = "";
-  outerStockContainerChangePercentEl.textContent = "";
-  outerStockContainerAbsoluteEl.textContent = "";
-  outerStockContainerMarketCapEl.textContent = "";
+    outerStockContainerEl.classList.remove("blink_text");
+    outerStockContainerEl.textContent = "";
+    outerStockContainerNameEl.textContent = "";
+    outerStockContainerCompanyNameEl.textContent = "";
+    outerStockContainerOpeningPriceEl.textContent = "";
+    outerStockContainerCurrentPriceEl.textContent = "";
+    outerStockContainerChangePercentEl.textContent = "";
+    outerStockContainerAbsoluteEl.textContent = "";
+    outerStockContainerMarketCapEl.textContent = "";
 };
 
 //fetch call for stockdata from API
 var getStockData = function (stockInput) {
   var ApiKey =
-    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" +
-    stockInput +
-    "&interval=5min&apikey=EME3FI6FSOTMXXLD";
+    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=5min&apikey=EME3FI6FSOTMXXLD";
   fetch(ApiKey)
     .then((res) => res)
     .then(function (response) {
@@ -47,17 +49,17 @@ var getStockData = function (stockInput) {
         response.json().then(function (data) {
           displayStockData(data, stockInput);
         });
-      } else {
-        alert("No Stock Data Returned: " + response.statusText);
+      } 
+      else {
+        outerStockContainerEl.textContent = "No Stock Data Returned: XXXX";
+        console.log('1')
       }
-    });
+    })
 };
 //fetch call for marketcap data from API
 var getMarketCap = function (stockInput) {
   var ApiKey =
-    "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" +
-    stockInput +
-    "&apikey=EME3FI6FSOTMXXLD";
+    "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=EME3FI6FSOTMXXLD";
   fetch(ApiKey)
     .then((res) => res)
     .then(function (response) {
@@ -66,7 +68,8 @@ var getMarketCap = function (stockInput) {
           displayMarketCap(data);
         });
       } else {
-        alert("No Market Cap Returned " + response.statusText);
+        outerStockContainerEl.textContent = "No Market Cap Returned: YYYY";
+        console.log('2')
       }
     });
 };
@@ -85,63 +88,82 @@ var displayStockData = function (data, stockInput) {
 
   //get price starts here
   //getting this from the returned API
-  var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"]; //this has spaces so we use [] to get to data
+  
 
-  //getting this from returned data using lastRefreshedTime
-  var currentClosePrice =
-    data["Time Series (5min)"][lastRefreshedTime]["4. close"];
-  currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
-  var currentClosePriceEl = document.createElement("div");
-  currentClosePriceEl.textContent = "Current Price: $" + currentClosePrice;
+  try {
+    var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
+  }
+  catch(err) {
+    outerStockContainerEl.textContent = "No Stock Data Returned";
+  }  
+  
+  var lastRefreshFail = data["Error Message"];
 
-  //Objects.keys returns an array of all the keys from the data [time Series]
-  var listOfTimes = Object.keys(data["Time Series (5min)"]);
+  if(lastRefreshFail){
+     console.log('I FAILED')
+  }
+  else{
+    //getting this from returned data using lastRefreshedTime
+    var currentClosePrice = data["Time Series (5min)"][lastRefreshedTime]["4. close"];
+    currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
+    var currentClosePriceEl = document.createElement("div");
+    currentClosePriceEl.textContent = "Current Price: $" + currentClosePrice;
 
-  //sorting the data returned and the default is asc alphabitcally
-  listOfTimes.sort();
+    //Objects.keys returns an array of all the keys from the data [time Series]
+    var listOfTimes = Object.keys(data["Time Series (5min)"]);
 
-  //returning the earliest time from the listOfTimes sort in this case the [0] array item
-  var openingTime = listOfTimes[0];
+    //sorting the data returned and the default is asc alphabitcally
+    listOfTimes.sort();
 
-  //getting the opening time using the opening time from the array above
-  var dayOpeningPrice = data["Time Series (5min)"][openingTime]["4. close"];
-  var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
-  var dayOpeningPriceEl = document.createElement("div");
-  dayOpeningPriceEl.textContent = "Opening Day Price: $" + dayOpeningPrice;
+    //returning the earliest time from the listOfTimes sort in this case the [0] array item
+    var openingTime = listOfTimes[0];
 
-  //calculations start here
-  //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
-  var growthPercentage = (currentClosePrice / dayOpeningPrice - 1) * 100;
-  growthPercentage = parseFloat(growthPercentage).toFixed(2);
-  var growthPercentageEl = document.createElement("div");
-  growthPercentageEl.textContent =
-    "Change Percentage: " + growthPercentage + "%";
+    //getting the opening time using the opening time from the array above
+    var dayOpeningPrice = data["Time Series (5min)"][openingTime]["4. close"];
+    var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
+    var dayOpeningPriceEl = document.createElement("div");
+    dayOpeningPriceEl.textContent = "Opening Day Price: $" + dayOpeningPrice;
 
-  //storing the difference from currentClosePricee and dayOpeningPrice
-  var absoluteGrowth = currentClosePrice - dayOpeningPrice;
-  absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
-  var absoluteGrowthEl = document.createElement("div");
-  if (absoluteGrowth < 1) {
-    absoluteGrowthEl.textContent = "Change: " + absoluteGrowth + " dollars";
-  } else {
-    absoluteGrowthEl.textContent = "Change: $" + absoluteGrowth;
+    //calculations start here
+    //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
+    var growthPercentage = (currentClosePrice / dayOpeningPrice - 1) * 100;
+    growthPercentage = parseFloat(growthPercentage).toFixed(2);
+    var growthPercentageEl = document.createElement("div");
+    growthPercentageEl.textContent =
+        "Change Percentage: " + growthPercentage + "%";
+
+    //storing the difference from currentClosePricee and dayOpeningPrice
+    var absoluteGrowth = currentClosePrice - dayOpeningPrice;
+    absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
+    var absoluteGrowthEl = document.createElement("div");
+    if (absoluteGrowth < 1) {
+        absoluteGrowthEl.textContent = "Change: " + absoluteGrowth + " dollars";
+    } else {
+        absoluteGrowthEl.textContent = "Change: $" + absoluteGrowth;
+    }
+
+    //append to outer container
+    outerStockContainerNameEl.appendChild(StockNameEl);
+    outerStockContainerOpeningPriceEl.appendChild(dayOpeningPriceEl);
+    outerStockContainerCurrentPriceEl.appendChild(currentClosePriceEl);
+    outerStockContainerChangePercentEl.appendChild(growthPercentageEl);
+    outerStockContainerAbsoluteEl.appendChild(absoluteGrowthEl);
+
+    //outer container big one
+    outerStockContainerEl.appendChild(outerStockContainerCompanyNameEl);
+    outerStockContainerEl.appendChild(outerStockContainerNameEl);
+    outerStockContainerEl.appendChild(outerStockContainerOpeningPriceEl);
+    outerStockContainerEl.appendChild(outerStockContainerCurrentPriceEl);
+    outerStockContainerEl.appendChild(outerStockContainerChangePercentEl);
+    outerStockContainerEl.appendChild(outerStockContainerAbsoluteEl);
+    outerStockContainerEl.appendChild(outerStockContainerMarketCapEl);
   }
 
-  //append to outer container
-  outerStockContainerNameEl.appendChild(StockNameEl);
-  outerStockContainerOpeningPriceEl.appendChild(dayOpeningPriceEl);
-  outerStockContainerCurrentPriceEl.appendChild(currentClosePriceEl);
-  outerStockContainerChangePercentEl.appendChild(growthPercentageEl);
-  outerStockContainerAbsoluteEl.appendChild(absoluteGrowthEl);
 
-  //outer container big one
-  outerStockContainerEl.appendChild(outerStockContainerNameEl);
-  outerStockContainerEl.appendChild(outerStockContainerOpeningPriceEl);
-  outerStockContainerEl.appendChild(outerStockContainerCurrentPriceEl);
-  outerStockContainerEl.appendChild(outerStockContainerChangePercentEl);
-  outerStockContainerEl.appendChild(outerStockContainerAbsoluteEl);
-  outerStockContainerEl.appendChild(outerStockContainerMarketCapEl);
+
+
 };
+
 // function to pull and display the market capitalization information
 var displayMarketCap = function (data) {
   var marketCap = data.MarketCapitalization;
@@ -162,8 +184,9 @@ var displayMarketCap = function (data) {
   };
 
   var marketCapFormatted = marketCapIterate(marketCap, 0);
-  outerStockContainerCompanyNameEl.innerHTML = companyName;
-  outerStockContainerMarketCapEl.innerHTML = "Market Cap: $ " + marketCapFormatted;
+  
+  outerStockContainerCompanyNameEl.textContent = companyName;
+  outerStockContainerMarketCapEl.textContent = "Market Cap: $ " + marketCapFormatted;
 };
 
 //On click form submit even handler
