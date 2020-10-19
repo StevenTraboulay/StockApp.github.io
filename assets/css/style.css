@@ -25,3 +25,25 @@
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
+.navbar > h1 {
+    text-align:center;
+}
+
+#stock-info {
+    max-width: 80%;
+    margin: auto;
+    background-color:hsl(171, 100%, 41%);
+    color:white;
+}
+
+#stock-info > div{
+    padding: 0rem 1rem;
+}
+
+.card-title{
+    margin-top: 1rem;
+}
+
+#stock-market-cap{
+    margin-bottom: 1rem;
+}
