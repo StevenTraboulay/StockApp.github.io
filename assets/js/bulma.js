@@ -1,24 +1,8 @@
-var searchClick = false;
+var historyClick = false;
 
-document.querySelector('#stock-search').addEventListener('click', function() {
-    if (searchClick) {
-        // reset header-bar
+historyButton = document.querySelector('#stock-history-btn');
 
-
-        // perform API search
-
-
-        //reset searchClick Variable
-        searchClick=false;
-        console.log(searchClick);
-    }
-    else {
-        // show search bar and hide add-to-watchlist button
-        document
-
-        //reset searchClickVariable
-        searchClick=true;
-        console.log(searchClick);
-    }
-})
-
+historyButton.addEventListener('click', function(event) {
+  event.stopPropagation();
+  historyButton.classList.toggle('is-active');
+});

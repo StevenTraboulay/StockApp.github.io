@@ -1,5 +1,5 @@
 //Initiated Global Variables
-var stockSubmit = document.querySelector("#input-group");
+var stockSubmit = document.querySelector("#stock-search");
 var outerStockContainerEl = document.querySelector("#stock-info");
 var outerStockContainerNameEl = document.querySelector("#stock-ticker-name");
 var outerStockContainerCompanyNameEl = document.querySelector("#stock-company-name");
@@ -72,7 +72,6 @@ var getMarketCap = function (stockInput) {
 };
 
 var displayStockData = function (data, stockInput) {
-  console.log(data);
 
   //check if api returned any repos
   if (data.length === 0) {
@@ -168,4 +167,11 @@ var displayMarketCap = function (data) {
 };
 
 //On click form submit even handler
-stockSubmit.addEventListener("submit", formSubmitHandler);
+stockSubmit.addEventListener("click", formSubmitHandler);
+// Trigger the searchbox function when enter is released
+document.addEventListener("keyup", function(event) {
+    // Number 13 is the "Enter" key on the keyboard?? why doesnt that work?
+    if (event.code == 'Enter') {
+        stockSubmit.click()
+    }
+});
