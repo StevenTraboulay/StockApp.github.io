@@ -21,14 +21,13 @@ var formSubmitHandler = function (event) {
     clearInput.value = "";
   } else {
     outerStockContainerEl.classList.add("blink_text");
-    outerStockContainerEl.textContent = "Symbol does not exist";
+    outerStockContainerNameEl.textContent = "Symbol does not exist";
   }
 };
 
 //clear containers
 var clearOut = function () {
     outerStockContainerEl.classList.remove("blink_text");
-    outerStockContainerEl.textContent = "";
     outerStockContainerNameEl.textContent = "";
     outerStockContainerCompanyNameEl.textContent = "";
     outerStockContainerOpeningPriceEl.textContent = "";
@@ -51,7 +50,7 @@ var getStockData = function (stockInput) {
         });
       } 
       else {
-        outerStockContainerEl.textContent = "No Stock Data Returned: XXXX";
+        outerStockContainerNameEl.textContent = "No Stock Data Returned: XXXX";
         console.log('1')
       }
     })
@@ -68,7 +67,7 @@ var getMarketCap = function (stockInput) {
           displayMarketCap(data);
         });
       } else {
-        outerStockContainerEl.textContent = "No Market Cap Returned: YYYY";
+        outerStockContainerNameEl.textContent = "No Market Cap Returned: YYYY";
         console.log('2')
       }
     });
@@ -78,7 +77,7 @@ var displayStockData = function (data, stockInput) {
 
   //check if api returned any repos
   if (data.length === 0) {
-    outerStockContainerEl.textContent = "No repos found, try again";
+    outerStockContainerNameEl.textContent = "No repos found, try again";
     return;
   }
   //get symbol name
@@ -94,7 +93,8 @@ var displayStockData = function (data, stockInput) {
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
   }
   catch(err) {
-    outerStockContainerEl.textContent = "No Stock Data Returned";
+    outerStockContainerNameEl.textContent = "No Stock Data Returned";
+    return 0;
   }  
   
   var lastRefreshFail = data["Error Message"];
@@ -170,7 +170,7 @@ var displayMarketCap = function (data) {
   var companyName = data["Name"];
   // Could add in things like description, PE, exchange, others from here
 
-  // Recursive loop for determining the post-fix for market cap according to the stock's valuation.
+  // Recursive loop for determining the post-fix for market cap according to the company's valuation.
   var marketCapIterate = function (data, counter) {
     data = parseInt(data);
     var testVal = data / 1000;
