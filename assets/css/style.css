@@ -1,0 +1,22 @@
+.navbar > h1 {
+    text-align:center;
+}
+
+#stock-info {
+    max-width: 80%;
+    margin: auto;
+    background-color:;
+    color:white;
+}
+
+#stock-info > div{
+    padding: 0rem 1rem;
+}
+
+.card-title{
+    margin-top: 1rem;
+}
+
+#stock-market-cap{
+    margin-bottom: 1rem;
+}
