@@ -63,6 +63,7 @@ var getStockInfo = function (stockInput) {
           if (data['Meta Data']) {
             storeDailyData(data);
           } else {
+            console.log('Timeseries API call failed');
             console.log(data)
             errorMessage = "Can not fetch daily change data on ticker: "+stockInput;
             stockDataContainer = {};
@@ -84,7 +85,9 @@ var getStockInfo = function (stockInput) {
             storeStockInfo(data);
             rewriteStockInfo();
             mktCapVisualize();
+            saveToLocalStorage();
           } else {
+            console.log('Overview API call failed');
             console.log(data)
             errorMessage = "Can not fetch Stock Information data on ticker: "+stockInput;
             stockDataContainer = {};
@@ -101,7 +104,8 @@ var storeDailyData = function (data) {
   var content = data['Meta Data']
   // if API call succeeds
   if (content){
-    console.log('Time Series API Succeeded')
+    console.log('Time Series API Succeeded');
+    console.log(data);
 
     // add stuff to stockDataContainer)
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
@@ -136,10 +140,9 @@ var storeDailyData = function (data) {
     stockDataContainer.changeAbs = absoluteGrowth;
     if (absoluteGrowth < 0) {
       stockDataContainer.loss = true;
-    }
+    } else {stockDataContainer.loss = false;}
   }else{
     // Produce Error Message
-    console.log('Timeseries API call failed');
     console.log(data);
   }
 }
@@ -168,7 +171,6 @@ var storeStockInfo = function (data) {
   stockDataContainer.SharesOutstanding = sharesTotal;
   } else {
     // Produce Error Message
-    console.log('Overview API call failed');
     console.log(data);
 }};
 
@@ -203,7 +205,9 @@ var rewriteStockInfo = function() {
   outerStockContainerMarketCapEl.textContent =  "Market Cap: $ " + stockDataContainer.marketCapFormatted;
 
   if (stockDataContainer.loss) {
-    outerStockContainerEl.style = 'background-color:hsl(348,100%,61%)';
+    outerStockContainerEl.style = 'background-color:hsl(348,100%,61%);';
+   } else {
+    outerStockContainerEl.style = 'background-color:hsl(171, 100%, 41%);';
    }
 }
 
@@ -227,6 +231,26 @@ var mktCapVisualize = function() {
   
 
 }
+var appendToHistoryList = function (ticker) {
+  // adds to history-list
+};
+
+var saveToLocalStorage = function () {
+  var data = localStorage.getItem('stock-list');
+
+  if (data) {
+    // check for duplicates, if no duplicates stores to localstorage and appends to History list
+  }
+  else{
+    // data = {stockDataContainer['tickerName']:stockDataContainer.companyName}
+  }
+}
+
+var loadFromLocalStorage = function() {
+
+}
+
+loadFromLocalStorage();
 
 //On click form submit even handler
 stockSubmit.addEventListener("click", formSubmitHandler);
@@ -236,3 +260,4 @@ document.addEventListener("keyup", function(event) {
         stockSubmit.click();
     }
 });
+
