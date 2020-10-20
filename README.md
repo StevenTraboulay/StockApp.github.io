@@ -1,14 +1,23 @@
 # StockApp.github.io
 StockApp Project1
 
+-------------
+How To Use App
+-------------
+1) Launch application / open index / click link
+2) input stock ticket symbol in search bar
+3) checks against APIs NASDAQ or NYSE database tickers
+4) correct symbol input results in displayed information consisting of: Opening day price, current price, change percentage, change in dollars and market cap
+5) an incorrect symbol input will result in displayed error.
+6) App will store last 3 stock calls to be recalled into view. 
 
 ------------
 GROUP PROCESS
 -------------
-1) idea concept creation
-    a) Movie API
-    b) Stock API
-    c) Sports API
+1) idea concept creation/
+    // Movie API
+    // Stock API
+    // Sports API
 
 2) Chose Stock API
 
@@ -62,12 +71,12 @@ Fix: get the last refresh time as variable and get last refreh variable but need
     1. g)created a new variable to get open stock price by using open time
     1. h) craeted growth and percentage variables based of open stock price and percentage
 2) API Problem:
-    2. a) the API is limited to 5 calls every 5 mins. and 500 calls a day.
-    2. b) the work around for this is to limit your calls. please be cognizant of this. 
+    2.  the API is limited to 5 calls every 5 mins. and 500 calls a day.
+    2.  the work around for this is to limit your calls. please be cognizant of this. 
 
 3) Market Cap value was not coming back with a usable value, or if it did it was too long of a number.
-    3. a) there needed to be a return object in the if statement. 
-    3. b) adding multiple points of return adds a reference point and lets us have a point for the data so it doesn't get lost. 
+    3.  there needed to be a return object in the if statement. 
+    3.  adding multiple points of return adds a reference point and lets us have a point for the data so it doesn't get lost. 
 
 
 
