@@ -9,6 +9,10 @@ var outerStockContainerChangePercentEl = document.querySelector("#stock-change-p
 var outerStockContainerAbsoluteEl = document.querySelector("#stock-change-absolute");
 var outerStockContainerMarketCapEl = document.querySelector("#stock-market-cap");
 
+
+// Stock Data Storage
+var dataContainer = {companyName:'', tickerName:''}
+
 //This executes when the event listener kicks off to handle the button click
 var formSubmitHandler = function (event) {
   event.preventDefault();
