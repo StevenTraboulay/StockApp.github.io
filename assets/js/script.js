@@ -9,6 +9,10 @@ var outerStockContainerChangePercentEl = document.querySelector("#stock-change-p
 var outerStockContainerAbsoluteEl = document.querySelector("#stock-change-absolute");
 var outerStockContainerMarketCapEl = document.querySelector("#stock-market-cap");
 
+var mktCapContainer = document.querySelector('#mkt-cap-vis')
+var mktCapTot = document.querySelector('#total-mkt-cap-comp')
+var mktCapDay = document.querySelector('#day-mkt-cap-comp')
+
 
 // Stock Data Storage
 var stockDataContainer = {};
@@ -16,24 +20,32 @@ var stockDataContainer = {};
 // Error Message Container
 var errorMessage = '';
 
+// Recursive loop for determining the post-fix for market cap according to the company's valuation.
+var magnitudeIterate = function (val, counter) {
+  value = parseInt(val);
+  var newMag = value / 1000;
+  if (newMag >= 1000) {
+    return magnitudeIterate(newMag, counter + 1);
+  } else {
+    magnitude = { 0: " Thousand", 1: " Million", 2: " Billion", 3: " Trillion" };
+    var returnVal = newMag.toString() + magnitude[counter];
+    return returnVal;
+  }
+};
+
+
 //This executes when the event listener kicks off to handle the button click
 var formSubmitHandler = function (event) {
   event.preventDefault();
   var stockInput = document.querySelector("#stock-input").value.trim();
-
-  // TODO: remove clearout as rewriteStockInfo takes care of it
-  // TODO: store getStockData as a variable, store getMarketCap as a variable
-  // TODO: if getStockData + getMarketCap == 0; rewrite stock info
-  //       otherwise display the error message from errorMessage and then clear it.
+  console.log('Fetching Data for: ',stockInput);
   if (stockInput) {
     var clearInput = document.querySelector("#stock-input");
     clearInput.value = "";
     clearOut();
     getStockInfo(stockInput);
   } else {
-    outerStockContainerEl.classList.add("blink_text");
-    clearOut();
-    outerStockContainerNameEl.textContent = "Symbol does not exist";
+    return 1;
   }
 };
 
@@ -71,12 +83,13 @@ var getStockInfo = function (stockInput) {
           if (stockDataContainer.openPrice && data['Symbol']) {
             storeStockInfo(data);
             rewriteStockInfo();
+            mktCapVisualize();
           } else {
             console.log(data)
             errorMessage = "Can not fetch Stock Information data on ticker: "+stockInput;
             stockDataContainer = {};
             outerStockContainerCompanyNameEl.innerHTML += errorMessage+'';
-            outerStockContainerNameEl.innerHTML = '<br>Please try another ticker or wait for 1 minute before trying another search.'
+            outerStockContainerNameEl.innerHTML = '<br>Please try another ticker or wait for 1 minute before trying another search. See console for details.'
             errorMessage = '';
           }
         });
@@ -121,6 +134,9 @@ var storeDailyData = function (data) {
     stockDataContainer.lastPrice = currentClosePrice;
     stockDataContainer.changePerc = growthPercentage;
     stockDataContainer.changeAbs = absoluteGrowth;
+    if (absoluteGrowth < 0) {
+      stockDataContainer.loss = true;
+    }
   }else{
     // Produce Error Message
     console.log('Timeseries API call failed');
@@ -140,24 +156,16 @@ var storeStockInfo = function (data) {
   var companyName = data["Name"];
   var ticker = data["Symbol"];
   var desc = data["Description"];
+  var sharesTotal = data['SharesOutstanding'];
 
-  // Recursive loop for determining the post-fix for market cap according to the company's valuation.
-  var marketCapIterate = function (val, counter) {
-    value = parseInt(val);
-    var newMag = value / 1000;
-    if (newMag >= 1000) {
-      return marketCapIterate(newMag, counter + 1);
-    } else {
-      magnitude = { 0: " Thousand", 1: " Million", 2: " Billion", 3: " Trillion" };
-      var returnVal = newMag.toString() + magnitude[counter];
-      return returnVal;
-    }
-  };
-    var marketCapFormatted = marketCapIterate(marketCap, 0);
-    stockDataContainer.tickerName = ticker;
-    stockDataContainer.companyName = companyName;
-    stockDataContainer.marketCap = marketCapFormatted;
-    stockDataContainer.description = desc;
+
+  var marketCapFormatted = magnitudeIterate(marketCap, 0);
+  stockDataContainer.tickerName = ticker;
+  stockDataContainer.companyName = companyName;
+  stockDataContainer.marketCap = marketCap;
+  stockDataContainer.marketCapFormatted = marketCapFormatted;
+  stockDataContainer.description = desc;
+  stockDataContainer.SharesOutstanding = sharesTotal;
   } else {
     // Produce Error Message
     console.log('Overview API call failed');
@@ -168,7 +176,9 @@ var storeStockInfo = function (data) {
 var clearOut = function () {
   console.log('Clearing Out')
   outerStockContainerEl.classList.remove("blink_text");
-  outerStockContainerEl.style = ''
+  outerStockContainerEl.style = '';
+  mktCapContainer.style = '';
+
   outerStockContainerNameEl.textContent = "";
   outerStockContainerCompanyNameEl.textContent = "";
   outerStockContainerOpeningPriceEl.textContent = "";
@@ -176,6 +186,9 @@ var clearOut = function () {
   outerStockContainerChangePercentEl.textContent = "";
   outerStockContainerAbsoluteEl.textContent = "";
   outerStockContainerMarketCapEl.textContent = "";
+
+  mktCapTot.textContent = "";
+  mktCapDay.textContent = "";
 };
 
 // rewrites the stock-info and its contents based on info from stockDataContainer
@@ -187,10 +200,33 @@ var rewriteStockInfo = function() {
   outerStockContainerCurrentPriceEl.textContent ="Current Price: $" +  stockDataContainer.lastPrice;
   outerStockContainerChangePercentEl.textContent = "Change Percentage: " + stockDataContainer.changePerc;
   outerStockContainerAbsoluteEl.textContent = "Change: " + stockDataContainer.changeAbs +' Dollars';
-  outerStockContainerMarketCapEl.textContent =  "Market Cap: $ " + stockDataContainer.marketCap;
+  outerStockContainerMarketCapEl.textContent =  "Market Cap: $ " + stockDataContainer.marketCapFormatted;
+
+  if (stockDataContainer.loss) {
+    outerStockContainerEl.style = 'background-color:hsl(348,100%,61%)';
+   }
 }
 
 // TODO: Add a market-cap Visualizer
+var mktCapVisualize = function() {
+  var mktCapContainer = document.querySelector('#mkt-cap-vis')
+  var mktCapTot = document.querySelector('#total-mkt-cap-comp')
+  var mktCapDay = document.querySelector('#day-mkt-cap-comp')
+  var keyword = 'gained'
+  if (stockDataContainer.loss) {keyword = 'lost'}
+
+  var medianIndividualIncome =  55000;
+  /// mktCap / medianIndividualIncome == num of people funded for a year
+  /// (dayChange*sharesOutstanding) / medianHouseholdIncome = num of people that can be funded for a year based on today's movements
+
+  mktCapTot.innerHTML = "If each canadian made $"+medianIndividualIncome+" in a year:<br>"+stockDataContainer.tickerName +" is valued at $"+stockDataContainer.marketCapFormatted+". This is equivalent to the salary of <b>"
+                        + magnitudeIterate(stockDataContainer.marketCap/medianIndividualIncome, 0) + " canadians.</b>"
+  mktCapDay.innerHTML = "The daily change in "+stockDataContainer.tickerName+"'s stock price represents <b>"+
+                        Math.abs(parseInt((stockDataContainer.changeAbs*stockDataContainer.SharesOutstanding)/medianIndividualIncome))+" canadians income</b> worth of value "
+                        +keyword+'.'
+  
+
+}
 
 //On click form submit even handler
 stockSubmit.addEventListener("click", formSubmitHandler);

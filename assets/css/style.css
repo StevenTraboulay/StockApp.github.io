@@ -37,6 +37,14 @@
     color:white;
 }
 
+#mkt-cap-vis{
+    color: hsl(204, 86%, 53%);
+    margin: auto;
+    max-width: 80%;
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
+
 #stock-info > div{
     padding: 0rem 1rem;
 }
