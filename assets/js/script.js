@@ -200,7 +200,7 @@ var rewriteStockInfo = function() {
   outerStockContainerCompanyNameEl.textContent = stockDataContainer.companyName;
   outerStockContainerOpeningPriceEl.textContent = "Opening Price: $" + stockDataContainer.openPrice;
   outerStockContainerCurrentPriceEl.textContent ="Current Price: $" +  stockDataContainer.lastPrice;
-  outerStockContainerChangePercentEl.textContent = "Change Percentage: " + stockDataContainer.changePerc;
+  outerStockContainerChangePercentEl.textContent = "Change Percentage: " + stockDataContainer.changePerc +"%";
   outerStockContainerAbsoluteEl.textContent = "Change: " + stockDataContainer.changeAbs +' Dollars';
   outerStockContainerMarketCapEl.textContent =  "Market Cap: $ " + stockDataContainer.marketCapFormatted;
 
@@ -213,20 +213,24 @@ var rewriteStockInfo = function() {
 
 // TODO: Add a market-cap Visualizer
 var mktCapVisualize = function() {
-  var mktCapContainer = document.querySelector('#mkt-cap-vis')
-  var mktCapTot = document.querySelector('#total-mkt-cap-comp')
-  var mktCapDay = document.querySelector('#day-mkt-cap-comp')
   var keyword = 'gained'
   if (stockDataContainer.loss) {keyword = 'lost'}
 
   var medianIndividualIncome =  55000;
+
+  var diffCalculator = function(value) {
+    var totalEquivalence = stockDataContainer.marketCap / value;
+    var dailyEquivalence = Math.abs(parseInt((stockDataContainer.changeAbs*stockDataContainer.SharesOutstanding)/value))
+
+    return [totalEquivalence, dailyEquivalence]
+  }
   /// mktCap / medianIndividualIncome == num of people funded for a year
   /// (dayChange*sharesOutstanding) / medianHouseholdIncome = num of people that can be funded for a year based on today's movements
 
   mktCapTot.innerHTML = "If each canadian made $"+medianIndividualIncome+" in a year:<br>"+stockDataContainer.tickerName +" is valued at $"+stockDataContainer.marketCapFormatted+". This is equivalent to the salary of <b>"
-                        + magnitudeIterate(stockDataContainer.marketCap/medianIndividualIncome, 0) + " canadians.</b>"
+                        + magnitudeIterate(diffCalculator(medianIndividualIncome)[0], 0) + " canadians.</b>"
   mktCapDay.innerHTML = "The daily change in "+stockDataContainer.tickerName+"'s stock price represents <b>"+
-                        Math.abs(parseInt((stockDataContainer.changeAbs*stockDataContainer.SharesOutstanding)/medianIndividualIncome))+" canadians income</b> worth of value "
+                       diffCalculator(medianIndividualIncome)[1]+" canadians income</b> worth of value "
                         +keyword+'.'
   
 
