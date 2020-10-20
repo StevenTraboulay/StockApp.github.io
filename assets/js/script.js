@@ -11,18 +11,33 @@ var outerStockContainerMarketCapEl = document.querySelector("#stock-market-cap")
 
 
 // Stock Data Storage
-var dataContainer = {companyName:'', tickerName:''}
+var stockDataContainer = {companyName:'', 
+                          tickerName:'', 
+                          openPrice:'',
+                          lastPrice:'',
+                          changePerc:'',
+                          changeAbs:'',
+                          marketCap:''};
+
+// Error Message Container
+var errorMessage = '';
 
 //This executes when the event listener kicks off to handle the button click
 var formSubmitHandler = function (event) {
   event.preventDefault();
   var stockInput = document.querySelector("#stock-input").value.trim();
+
+  // TODO: remove clearout as rewriteStockInfo takes care of it
+  // TODO: store getStockData as a variable, store getMarketCap as a variable
+  // TODO: if getStockData + getMarketCap == 0; rewrite stock info
+  //       otherwise display the error message from errorMessage and then clear it.
   if (stockInput) {
     clearOut();
     getStockData(stockInput);
     getMarketCap(stockInput);
     var clearInput = document.querySelector("#stock-input");
     clearInput.value = "";
+    // rewriteStockInfo()
   } else {
     outerStockContainerEl.classList.add("blink_text");
     outerStockContainerNameEl.textContent = "Symbol does not exist";
@@ -32,6 +47,7 @@ var formSubmitHandler = function (event) {
 //clear containers
 var clearOut = function () {
     outerStockContainerEl.classList.remove("blink_text");
+    outerStockContainerEl.style = ''
     outerStockContainerNameEl.textContent = "";
     outerStockContainerCompanyNameEl.textContent = "";
     outerStockContainerOpeningPriceEl.textContent = "";
@@ -175,15 +191,15 @@ var displayMarketCap = function (data) {
   // Could add in things like description, PE, exchange, others from here
 
   // Recursive loop for determining the post-fix for market cap according to the company's valuation.
-  var marketCapIterate = function (data, counter) {
-    data = parseInt(data);
-    var testVal = data / 1000;
-    if (testVal > 999) {
-      return marketCapIterate(data / 1000, counter + 1);
+  var marketCapIterate = function (val, counter) {
+    value = parseInt(val);
+    var newMag = value / 1000;
+    if (newMag >= 1000) {
+      return marketCapIterate(newMag, counter + 1);
     } else {
-      caps = { 0: " Thousand", 1: " Million", 2: " Billion", 3: " Trillion" };
-      var returnVal = testVal.toString() + caps[counter];
-      return returnVal.toString();
+      magnitude = { 0: " Thousand", 1: " Million", 2: " Billion", 3: " Trillion" };
+      var returnVal = newMag.toString() + magnitude[counter];
+      return returnVal;
     }
   };
 
@@ -193,12 +209,25 @@ var displayMarketCap = function (data) {
   outerStockContainerMarketCapEl.textContent = "Market Cap: $ " + marketCapFormatted;
 };
 
+// rewrites the stock-info and its contents based on info from stockDataContainer
+var rewriteStockInfo = function() {
+  clearOut();
+  outerStockContainerNameEl.textContent = stockDataContainer.tickerName;
+  outerStockContainerCompanyNameEl.textContent = stockDataContainer.companyName;
+  outerStockContainerOpeningPriceEl.textContent = stockDataContainer.openPrice;
+  outerStockContainerCurrentPriceEl.textContent = stockDataContainer.lastPrice;
+  outerStockContainerChangePercentEl.textContent = stockDataContainer.changePerc;
+  outerStockContainerAbsoluteEl.textContent = stockDataContainer.changeAbs;
+  outerStockContainerMarketCapEl.textContent = stockDataContainer.marketCap;
+}
+
+// TODO: Add a market-cap Visualizer
+
 //On click form submit even handler
 stockSubmit.addEventListener("click", formSubmitHandler);
 // Trigger the searchbox function when enter is released
 document.addEventListener("keyup", function(event) {
-    // Number 13 is the "Enter" key on the keyboard?? why doesnt that work?
     if (event.code == 'Enter') {
-        stockSubmit.click()
+        stockSubmit.click();
     }
 });
