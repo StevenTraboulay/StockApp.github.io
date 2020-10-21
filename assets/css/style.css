@@ -1,0 +1,59 @@
+.blink_text {
+
+    animation:1s blinker linear infinite;
+    -webkit-animation:1s blinker linear infinite;
+    -moz-animation:1s blinker linear infinite;
+
+     color: red;
+     font-size: 40px;
+    }
+
+    @-moz-keyframes blinker {  
+     0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+     }
+
+    @-webkit-keyframes blinker {  
+     0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+     }
+
+    @keyframes blinker {  
+     0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+     }
+.navbar > h1 {
+    text-align:center;
+}
+
+
+#stock-info {
+    max-width: 80%;
+    margin: auto;
+    margin-top:2rem;
+    background-color:hsl(171, 100%, 41%);
+    color:white;
+}
+
+#mkt-cap-vis{
+    color: hsl(204, 86%, 53%);
+    margin: auto;
+    max-width: 80%;
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
+
+#stock-info > div{
+    padding: 0rem 1rem;
+}
+
+.card-title{
+    margin-top: 1rem;
+}
+
+#stock-market-cap{
+    margin-bottom: 1rem;
+}

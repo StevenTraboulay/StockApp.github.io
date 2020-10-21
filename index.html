@@ -3,38 +3,63 @@
     <head>
         <meta charset="UTF-8" />
         <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
-        <link rel="icon" type="image/png" href="./assets/img/favicon.png"/>
+        <link rel="icon" type="image/png" href="./assets/img/favicon.svg"/>
         <link rel='stylesheet' href='./assets/css/style.css'>
-        <link rel='stylesheet' href='https://unpkg.com/@material-ui/core@latest/umd/material-ui.production.min.js'>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
         <title>Stock Screener</title>
     </head>
     <body>
-        <header >
-          <h1>Stock Screener</h1>
-          <p>Get and visualize stocks data</p>
-        </header>
-        <div class="content row">
-          <div class='left-bar'>
-            <div class='search-bar'>
-              <div class="input-group">
-                <input type="text" id='stock-input' placeholder="Provide a symbol" aria-label="Search for a stock">
-                <div class="input-group-append">
-                  <button type="button" id='stock-search'>Search</button>
+        <header class='navbar'>
+          <h1 class='title is-1 navbar-item'>Stock Screener</h1>
+          <div class='search-bar navbar-item navbar-end'>
+            <div id="input-group" class="field has-addons">
+              <div class="dropdown" id='stock-history-btn'>
+                <div class="dropdown-trigger">
+                  <button class="button has-text-primary" aria-haspopup="true" aria-controls="history-dropdown">
+                    <span>History</span>
+                    <span class="icon is-small">
+                      <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+                <div class="dropdown-menu" id="history-dropdown" role="menu">
+                  <div id = "inner-history" class="dropdown-content has-background-primary-light">
+              
+                  </div>
                 </div>
               </div>
-            </div>
-            <ul id="stock-history">
-                <li> stock 1 </li>
-                <li> stock 2 </li>
-            </ul>
-          </div>
-          <div id='stock-info'>
-              <div id='stock-name'>stock name here</div>
-              <div id='stock-open-price'>stock opening price here</div>
-              <div id='stock-last-price'>stock price here</div>
-              <div id='stock-change'>stock change in price from yesterday here</div>
-              <div id='stock-market-cap'>stock marketcap here</div>
+              <input type="text" class='input' id='stock-input' placeholder="Provide a symbol" aria-label="Search for a stock">
+              <button type="submit" class='button is-primary' id='stock-search'>Search</button>
+            </form>
+           
           </div>
 
+        </header>
+
+
+
+        
+        <div id='stock-info' class='card' style='display:none;'>
+            <div class='card-title'>
+              <div id='stock-company-name' class='title is-3 has-text-white'></div>
+              <div id='stock-ticker-name' class='subtitle is-5 has-text-white'></div>
+            </div>
+            <div id='stock-open-price'></div>
+            <div id='stock-last-price'></div>
+            <div id='stock-change-percent'></div>
+            <div id='stock-change-absolute'></div>
+            <div id='stock-market-cap'></div>
         </div>
+
+        <div id='mkt-cap-vis' class='card is-info' style='display:none;'>
+          <div id='total-mkt-cap-comp'></div>
+          <div id='day-mkt-cap-comp'></div>
+      </div>
+      </body>
+      <footer>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="./assets/js/currency.min.js"></script>
+        <script src="assets/js/bulma.js"></script>
+        <script src="./assets/js/script.js"></script>
+      </footer>
 </html>
