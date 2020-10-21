@@ -40,9 +40,8 @@ var formSubmitHandler = function (event) {
   var stockInput = document.querySelector("#stock-input").value.trim();
   console.log('Fetching Data for: ',stockInput);
   if (stockInput) {
-    var clearInput = document.querySelector("#stock-input");
-    clearInput.value = "";
-    clearOut();
+
+
     getStockInfo(stockInput);
   } else {
     return 1;
@@ -54,7 +53,10 @@ var getStockInfo = function (stockInput) {
   var timeSeries =
     "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=5min&apikey=EME3FI6FSOTMXXLD";
   var overview =
-  "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=EME3FI6FSOTMXXLD";
+  "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=OUE8TXQ1L0CBMKMQ";
+  var clearInput = document.querySelector("#stock-input");
+  clearInput.value = "";
+  clearOut();
   fetch(timeSeries)
     .then((res) => res)
     .then(function (response) {
@@ -237,21 +239,42 @@ var mktCapVisualize = function() {
 }
 var appendToHistoryList = function (ticker) {
   // adds to history-list
+  var button = $('<a>').attr('class','dropdown-item ').attr("href","#").html(ticker)
+  $("#inner-history").append(button)
+  button.on('click', function(event) {getStockInfo(event.target.textContent)})
 };
 
-var saveToLocalStorage = function () {
-  var data = localStorage.getItem('stock-list');
-
-  if (data) {
-    // check for duplicates, if no duplicates stores to localstorage and appends to History list
+var saveToLocalStorage = function() {
+  var searchHistory = localStorage.getItem('stock-list')
+  var name = stockDataContainer.tickerName;
+  if (searchHistory) {
+      searchHistory = JSON.parse(searchHistory);
+      if (searchHistory[name]){}
+      else {
+      searchHistory[name] = 'true';
+      searchHistory = JSON.stringify(searchHistory);
+      localStorage.setItem('stock-list',searchHistory);
+      appendToHistoryList(name);
+      }
   }
-  else{
-    // data = {stockDataContainer['tickerName']:stockDataContainer.companyName}
+
+  else {
+      searchHistory = {};
+      searchHistory[name] = true;
+      searchHistory = JSON.stringify(searchHistory);
+      localStorage.setItem('stock-list',searchHistory);
   }
 }
 
 var loadFromLocalStorage = function() {
-
+  searchHistory = localStorage.getItem('stock-list')
+  if (searchHistory) {
+      searchHistory = JSON.parse(searchHistory);
+      for (x in searchHistory) {
+        console.log(x);
+        appendToHistoryList(x)
+      }
+  }
 }
 
 loadFromLocalStorage();
@@ -265,3 +288,4 @@ document.addEventListener("keyup", function(event) {
     }
 });
 
+//////////////////////////
