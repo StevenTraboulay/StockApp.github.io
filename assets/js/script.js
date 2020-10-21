@@ -55,7 +55,7 @@ var formSubmitHandler = function (event) {
 //fetch call for stockdata from API
 var getStockInfo = function (stockInput) {
   var timeSeries =
-    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=5min&apikey=EME3FI6FSOTMXXLD";
+    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=15min&apikey=EME3FI6FSOTMXXLD";
   var overview =
   "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=OUE8TXQ1L0CBMKMQ";
   var clearInput = document.querySelector("#stock-input");
@@ -115,11 +115,11 @@ var storeDailyData = function (data) {
 
     // add stuff to stockDataContainer)
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
-    var currentClosePrice = data["Time Series (5min)"][lastRefreshedTime]["4. close"];
+    var currentClosePrice = data["Time Series (15min)"][lastRefreshedTime]["4. close"];
     currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
 
     //Objects.keys returns an array of all the keys from the data [time Series]
-    var listOfTimes = Object.keys(data["Time Series (5min)"]);
+    var listOfTimes = Object.keys(data["Time Series (15min)"]);
 
     //sorting the data returned and the default is asc alphabitcally
     listOfTimes.sort();
@@ -128,7 +128,7 @@ var storeDailyData = function (data) {
     var openingTime = listOfTimes[0];
 
     //getting the opening time using the opening time from the array above
-    var dayOpeningPrice = data["Time Series (5min)"][openingTime]["4. close"];
+    var dayOpeningPrice = data["Time Series (15min)"][openingTime]["4. close"];
     var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
 
     //calculations start here

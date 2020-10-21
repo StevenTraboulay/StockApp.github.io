@@ -78,6 +78,9 @@ Fix: get the last refresh time as variable and get last refreh variable but need
     3.  there needed to be a return object in the if statement. 
     3.  adding multiple points of return adds a reference point and lets us have a point for the data so it doesn't get lost. 
 
+4)  Erorr message weren't catching or appearing when needed
+    4. the original fix was to run a catch function for when the 
+
 
 
 
