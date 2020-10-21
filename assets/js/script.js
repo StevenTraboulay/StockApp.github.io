@@ -17,6 +17,10 @@ var mktCapDay = document.querySelector('#day-mkt-cap-comp')
 // Stock Data Storage
 var stockDataContainer = {};
 
+// Stock time-series contaienr from 9:30-4:00
+// TODO: implement data addition to this while looking for 9:30 and 4:00 values in the time-series data
+var stockTimeSeries = {};
+
 // Error Message Container
 var errorMessage = '';
 
