@@ -53,7 +53,7 @@ var formSubmitHandler = function (event) {
 //fetch call for stockdata from API
 var getStockInfo = function (stockInput) {
   var timeSeries =
-    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=5min&apikey=EME3FI6FSOTMXXLD";
+    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=15min&apikey=EME3FI6FSOTMXXLD";
   var overview =
     "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=OUE8TXQ1L0CBMKMQ";
   var clearInput = document.querySelector("#stock-input");
@@ -113,11 +113,11 @@ var storeDailyData = function (data) {
 
     // add stuff to stockDataContainer)
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
-    var currentClosePrice = data["Time Series (5min)"][lastRefreshedTime]["4. close"];
+    var currentClosePrice = data["Time Series (15min)"][lastRefreshedTime]["4. close"];
     currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
 
     //Objects.keys returns an array of all the keys from the data [time Series]
-    var listOfTimes = Object.keys(data["Time Series (5min)"]);
+    var listOfTimes = Object.keys(data["Time Series (15min)"]);
 
     //sorting the data returned and the default is asc alphabitcally
     listOfTimes.sort();
@@ -126,7 +126,7 @@ var storeDailyData = function (data) {
     var openingTime = listOfTimes[0];
 
     //getting the opening time using the opening time from the array above
-    var dayOpeningPrice = data["Time Series (5min)"][openingTime]["4. close"];
+    var dayOpeningPrice = data["Time Series (15min)"][openingTime]["4. close"];
     var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
 
     //calculations start here
@@ -193,6 +193,7 @@ var clearOut = function () {
   outerStockContainerAbsoluteEl.textContent = "";
   outerStockContainerMarketCapEl.textContent = "";
 
+  $('#mkt-cap-hdr').html("");
   mktCapTot.textContent = "";
   mktCapDay.textContent = "";
 };
@@ -220,7 +221,8 @@ var mktCapVisualize = function() {
   var keyword = 'gained'
   if (stockDataContainer.loss) {keyword = 'lost'}
 
-  var medianIndividualIncome =  55000;
+  var medianIndividualIncome =  36400;
+  var exchangeRate = 0.77;
 
   var diffCalculator = function(value) {
     var totalEquivalence = stockDataContainer.marketCap / value;
@@ -230,12 +232,15 @@ var mktCapVisualize = function() {
   }
   /// mktCap / medianIndividualIncome == num of people funded for a year
   /// (dayChange*sharesOutstanding) / medianHouseholdIncome = num of people that can be funded for a year based on today's movements
+  var medianIncomeComp = diffCalculator(medianIndividualIncome*exchangeRate);
 
-  mktCapTot.innerHTML = "If each canadian made $"+medianIndividualIncome+" in a year:<br>"+stockDataContainer.tickerName +" is valued at $"+stockDataContainer.marketCapFormatted+". This is equivalent to the salary of <b>"
-                        + magnitudeIterate(diffCalculator(medianIndividualIncome)[0], 0) + " canadians.</b>"
+  $('#mkt-cap-hdr').html("The median Canadian makes $"+medianIndividualIncome+" CAD per year (2018):");
+  mktCapTot.innerHTML = stockDataContainer.tickerName +"'s valuation would be equivalent to the salary of <b>"
+                        + magnitudeIterate(medianIncomeComp[0], 0) + " canadians.</b>";
   mktCapDay.innerHTML = "The daily change in "+stockDataContainer.tickerName+"'s stock price represents <b>"+
-                       diffCalculator(medianIndividualIncome)[1]+" canadians income</b> worth of value "
-                        +keyword+'.'
+                       medianIncomeComp[1]+" canadians income</b> worth of value "
+                        +keyword+'. In real dollars, that would be <b>$'+
+                        magnitudeIterate(medianIncomeComp[1]*medianIndividualIncome, 0)+'</b>.';
   
 
 }
@@ -255,7 +260,7 @@ var saveToLocalStorage = function() {
       searchHistory = JSON.parse(searchHistory);
       if (searchHistory[name]){}
       else {
-      searchHistory[name] = 'true';
+      searchHistory[name] = true;
       searchHistory = JSON.stringify(searchHistory);
       localStorage.setItem('stock-list',searchHistory);
       appendToHistoryList(name);
@@ -267,6 +272,7 @@ var saveToLocalStorage = function() {
       searchHistory[name] = true;
       searchHistory = JSON.stringify(searchHistory);
       localStorage.setItem('stock-list',searchHistory);
+      appendToHistoryList(name);
   }
 }
 

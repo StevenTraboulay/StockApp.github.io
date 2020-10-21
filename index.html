@@ -29,7 +29,7 @@
                   </div>
                 </div>
               </div>
-              <input type="text" class='input mx-1' id='stock-input' placeholder="Provide a symbol" aria-label="Search for a stock">
+              <input type="text" class='input mx-1' id='stock-input' placeholder="Ticker Symbol" aria-label="Search for a stock">
               <button type="submit" class='button is-primary fa fa-search mx-1' id='stock-search'></button>
             </div>
            
@@ -53,8 +53,9 @@
         </div>
 
         <div id='mkt-cap-vis' class='card is-info' style='display:none;'>
-          <div id='total-mkt-cap-comp'></div>
-          <div id='day-mkt-cap-comp'></div>
+          <div id='mkt-cap-hdr' class='m-2 subtitle is-5 has-text-info'></div>
+          <div id='total-mkt-cap-comp' class='m-2'></div>
+          <div id='day-mkt-cap-comp' class='m-2'></div>
       </div>
       </body>
       <footer>
