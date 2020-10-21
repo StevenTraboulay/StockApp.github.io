@@ -195,6 +195,7 @@ var clearOut = function () {
   outerStockContainerAbsoluteEl.textContent = "";
   outerStockContainerMarketCapEl.textContent = "";
 
+  $('#mkt-cap-hdr').html("");
   mktCapTot.textContent = "";
   mktCapDay.textContent = "";
 };
@@ -222,7 +223,8 @@ var mktCapVisualize = function() {
   var keyword = 'gained'
   if (stockDataContainer.loss) {keyword = 'lost'}
 
-  var medianIndividualIncome =  55000;
+  var medianIndividualIncome =  36400;
+  var exchangeRate = 0.77;
 
   var diffCalculator = function(value) {
     var totalEquivalence = stockDataContainer.marketCap / value;
@@ -232,12 +234,15 @@ var mktCapVisualize = function() {
   }
   /// mktCap / medianIndividualIncome == num of people funded for a year
   /// (dayChange*sharesOutstanding) / medianHouseholdIncome = num of people that can be funded for a year based on today's movements
+  var medianIncomeComp = diffCalculator(medianIndividualIncome*exchangeRate);
 
-  mktCapTot.innerHTML = "If each canadian made $"+medianIndividualIncome+" in a year:<br>"+stockDataContainer.tickerName +" is valued at $"+stockDataContainer.marketCapFormatted+". This is equivalent to the salary of <b>"
-                        + magnitudeIterate(diffCalculator(medianIndividualIncome)[0], 0) + " canadians.</b>"
+  $('#mkt-cap-hdr').html("The median Canadian makes $"+medianIndividualIncome+" CAD per year (2018):");
+  mktCapTot.innerHTML = stockDataContainer.tickerName +"'s valuation would be equivalent to the salary of <b>"
+                        + magnitudeIterate(medianIncomeComp[0], 0) + " canadians.</b>";
   mktCapDay.innerHTML = "The daily change in "+stockDataContainer.tickerName+"'s stock price represents <b>"+
-                       diffCalculator(medianIndividualIncome)[1]+" canadians income</b> worth of value "
-                        +keyword+'.'
+                       medianIncomeComp[1]+" canadians income</b> worth of value "
+                        +keyword+'. In real dollars, that would be $'+
+                        magnitudeIterate(medianIncomeComp[1]*medianIndividualIncome, 0)+'.';
   
 
 }
