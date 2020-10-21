@@ -255,7 +255,7 @@ var saveToLocalStorage = function() {
       searchHistory = JSON.parse(searchHistory);
       if (searchHistory[name]){}
       else {
-      searchHistory[name] = 'true';
+      searchHistory[name] = true;
       searchHistory = JSON.stringify(searchHistory);
       localStorage.setItem('stock-list',searchHistory);
       appendToHistoryList(name);
@@ -267,6 +267,7 @@ var saveToLocalStorage = function() {
       searchHistory[name] = true;
       searchHistory = JSON.stringify(searchHistory);
       localStorage.setItem('stock-list',searchHistory);
+      appendToHistoryList(name);
   }
 }
 
