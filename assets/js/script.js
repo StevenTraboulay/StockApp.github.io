@@ -236,9 +236,9 @@ var mktCapVisualize = function() {
 
   $('#mkt-cap-hdr').html("The median Canadian makes $"+medianIndividualIncome+" CAD per year (2018):");
   mktCapTot.innerHTML = stockDataContainer.tickerName +"'s valuation would be equivalent to the salary of <b>"
-                        + magnitudeIterate(medianIncomeComp[0], 0) + " canadians.</b>";
+                        + magnitudeIterate(medianIncomeComp[0], 0) + " Canadians.</b>";
   mktCapDay.innerHTML = "The daily change in "+stockDataContainer.tickerName+"'s stock price represents <b>"+
-                       medianIncomeComp[1]+" canadians income</b> worth of value "
+                       medianIncomeComp[1]+" Canadians income</b> worth of value "
                         +keyword+'. In real dollars, that would be <b>$'+
                         magnitudeIterate(medianIncomeComp[1]*medianIndividualIncome, 0)+'</b>.';
   
@@ -250,7 +250,7 @@ var appendToHistoryList = function (ticker) {
   var link = $('<a>').attr('class','dropdown-item watchlist-item').attr("href","#").attr('id',ticker+'-container');
   var button = $('<span>').attr('class', 'stock-search-button').html(ticker);
   var remove = $('<span>').attr('class', 'icon is-medium p-3 trash-item')
-    .html('<i class="fa fa-trash" id="'+ticker+'-rmv"></i>');
+              .html('<i class="fa fa-trash" id="'+ticker+'-rmv"></i>');
 
   link.append(button).append(remove);
   $("#inner-history").append(link);
@@ -330,5 +330,7 @@ document.addEventListener("keyup", function(event) {
         stockSubmit.click();
     }
 });
+
+window.onresize = visualizeMarketCap;
 
 //////////////////////////

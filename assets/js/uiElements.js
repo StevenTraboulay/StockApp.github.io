@@ -6,27 +6,26 @@ historyButton.addEventListener('click', function(event) {
   historyButton.classList.toggle('is-active');
 });
 
-var tree
-
 var treeMapDataGenerator = function() {
   var setup = [['Ticker', 'Parent', 'Market Cap (USD)', 'marketCap:Employees ratio'],
                ['Watchlisted Stocks',null,0,0]];
 
   // Pull data from Localstorage
     searchHistory = localStorage.getItem('stock-list')
-    if (searchHistory) {
+    searchHistory = JSON.parse(searchHistory);
+    console.log(searchHistory);
+    if (!(jQuery.isEmptyObject(searchHistory))) {
         // Format Data
         // myRow = [ticker, empty, marketCap, numEmployees-to-marketCap]
         // See https://developers.google.com/chart/interactive/docs/gallery/treemap#data-format for details
-        searchHistory = JSON.parse(searchHistory);
         for (x in searchHistory) {
           var ratio = parseInt(searchHistory[x].marketCap)/parseInt(searchHistory[x].employees)
           setup.push([searchHistory[x].tickerName,'Watchlisted Stocks',parseInt(searchHistory[x].marketCap), ratio.toFixed(2)])
         }
-        console.log(setup)
         return setup;
         
     } else{
+      $('#chart_div').html('')
       return false;
     }
 }
@@ -36,8 +35,6 @@ google.charts.setOnLoadCallback(visualizeMarketCap);
 
 
 function visualizeMarketCap() {
-  console.log('drawing')
-
   var dataToDraw = treeMapDataGenerator();
 
   //Cut off further code if there's nothing to draw
