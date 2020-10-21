@@ -126,7 +126,7 @@ var storeDailyData = function (data) {
     // .filter loops through listOfTimes and removes anything that doesn't match
     var filteredListOfTimes = listOfTimes.filter(function(time){
       //what does the return do: 
-      return time.indexOf(lastDay) > -1  //anything that includes lastDay (ie. 2020-10-20)
+      return time.indexOf(lastDay) > -1  //anything that includes lastDay (ie. 2020-10-20) "-1 means it didn't find anything"
     });
 
     //get the list of values to create a graph with - Kumash asked for the data stored in a variable
