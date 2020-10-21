@@ -17,7 +17,6 @@ var mktCapDay = document.querySelector('#day-mkt-cap-comp')
 // Stock Data Storage
 var stockDataContainer = {};
 
-// Stock time-series contaienr from 9:30-4:00
 // TODO: implement data addition to this while looking for 9:30 and 4:00 values in the time-series data
 var stockTimeSeries = {};
 
@@ -111,33 +110,56 @@ var storeDailyData = function (data) {
 
     // add stuff to stockDataContainer)
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
-    var currentClosePrice = data["Time Series (15min)"][lastRefreshedTime]["4. close"];
-    currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
+    //var currentClosePrice = data["Time Series (15min)"][lastRefreshedTime]["4. close"];
+    //currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
+    
+    //last day is the date only and not the time in the entire string
+    var lastDay = lastRefreshedTime.split(" ")[0];
+
+    var marketOpenPrice = data["Time Series (15min)"][lastDay + " 09:45:00"]["4. close"];
+    marketOpenPrice = parseInt(marketOpenPrice).toFixed(2);
+    var marketClosePrice = data["Time Series (15min)"][lastDay + " 16:00:00"]["4. close"];
+    marketClosePrice = parseInt(marketClosePrice).toFixed(2);
 
     //Objects.keys returns an array of all the keys from the data [time Series]
     var listOfTimes = Object.keys(data["Time Series (15min)"]);
+    // .filter loops through listOfTimes and removes anything that doesn't match
+    var filteredListOfTimes = listOfTimes.filter(function(time){
+      //what does the return do: 
+      return time.indexOf(lastDay) > -1  //anything that includes lastDay (ie. 2020-10-20)
+    });
+
+    //get the list of values to create a graph with - Kumash asked for the data stored in a variable
+    var listOfCloseValues = filteredListOfTimes.map(function(time){  
+      return {
+        value:data["Time Series (15min)"][time]["4. close"],
+        time:time
+      } 
+    })
+
+    console.log(listOfCloseValues);
 
     //sorting the data returned and the default is asc alphabitcally
-    listOfTimes.sort();
+    //listOfTimes.sort();
 
     //returning the earliest time from the listOfTimes sort in this case the [0] array item
-    var openingTime = listOfTimes[0];
+    //var openingTime = listOfTimes[0];
 
     //getting the opening time using the opening time from the array above
-    var dayOpeningPrice = data["Time Series (15min)"][openingTime]["4. close"];
-    var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
+    //var dayOpeningPrice = data["Time Series (15min)"][openingTime]["4. close"];
+    //var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
 
     //calculations start here
     //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
-    var growthPercentage = (currentClosePrice / dayOpeningPrice - 1) * 100;
+    var growthPercentage = (marketClosePrice / marketOpenPrice - 1) * 100;
     growthPercentage = parseFloat(growthPercentage).toFixed(2);
 
     //storing the difference from currentClosePricee and dayOpeningPrice
-    var absoluteGrowth = currentClosePrice - dayOpeningPrice;
+    var absoluteGrowth = marketClosePrice - marketOpenPrice;
     absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
 
-    stockDataContainer.openPrice = dayOpeningPrice;
-    stockDataContainer.lastPrice = currentClosePrice;
+    stockDataContainer.openPrice = marketOpenPrice;
+    stockDataContainer.lastPrice = marketClosePrice;
     stockDataContainer.changePerc = growthPercentage;
     stockDataContainer.changeAbs = absoluteGrowth;
     if (absoluteGrowth < 0) {
