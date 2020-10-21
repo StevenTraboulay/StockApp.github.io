@@ -44,8 +44,6 @@ var formSubmitHandler = function (event) {
   var stockInput = document.querySelector("#stock-input").value.trim();
   console.log('Fetching Data for: ',stockInput);
   if (stockInput) {
-
-
     getStockInfo(stockInput);
   } else {
     return 1;
@@ -57,7 +55,7 @@ var getStockInfo = function (stockInput) {
   var timeSeries =
     "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockInput + "&interval=5min&apikey=EME3FI6FSOTMXXLD";
   var overview =
-  "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=OUE8TXQ1L0CBMKMQ";
+    "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockInput + "&apikey=OUE8TXQ1L0CBMKMQ";
   var clearInput = document.querySelector("#stock-input");
   clearInput.value = "";
   clearOut();
@@ -241,6 +239,8 @@ var mktCapVisualize = function() {
   
 
 }
+
+
 var appendToHistoryList = function (ticker) {
   // adds to history-list
   var button = $('<a>').attr('class','dropdown-item ').attr("href","#").html(ticker)
