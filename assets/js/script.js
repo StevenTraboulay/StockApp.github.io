@@ -241,8 +241,8 @@ var mktCapVisualize = function() {
                         + magnitudeIterate(medianIncomeComp[0], 0) + " canadians.</b>";
   mktCapDay.innerHTML = "The daily change in "+stockDataContainer.tickerName+"'s stock price represents <b>"+
                        medianIncomeComp[1]+" canadians income</b> worth of value "
-                        +keyword+'. In real dollars, that would be $'+
-                        magnitudeIterate(medianIncomeComp[1]*medianIndividualIncome, 0)+'.';
+                        +keyword+'. In real dollars, that would be <b>$'+
+                        magnitudeIterate(medianIncomeComp[1]*medianIndividualIncome, 0)+'</b>.';
   
 
 }

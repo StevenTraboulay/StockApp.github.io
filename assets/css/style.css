@@ -57,3 +57,11 @@
 #stock-market-cap{
     margin-bottom: 1rem;
 }
+
+@media screen and (min-width: 1024px){
+    header{
+        max-width: 95%;
+        margin:auto;
+
+    }
+}
