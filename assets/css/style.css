@@ -30,6 +30,29 @@
     user-select: none;
 }
 
+#inner-history > .watchlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 0.5rem;
+    padding-left: 1rem;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.trash-item{
+    height:100%;
+}
+
+.trash-item:hover{
+    background-color: #ff3860;
+    color: #FFF;
+}
+
+.stock-search-button{
+    height:100%;
+    width:100%;
+}
 
 #stock-info {
     max-width: 80%;

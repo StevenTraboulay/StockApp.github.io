@@ -245,12 +245,37 @@ var mktCapVisualize = function() {
 
 }
 
-
 var appendToHistoryList = function (ticker) {
   // adds to history-list
-  var button = $('<a>').attr('class','dropdown-item ').attr("href","#").html(ticker)
-  $("#inner-history").append(button)
-  button.on('click', function(event) {getStockInfo(event.target.textContent)})
+  var link = $('<a>').attr('class','dropdown-item watchlist-item').attr("href","#").attr('id',ticker+'-container');
+  var button = $('<span>').attr('class', 'stock-search-button').html(ticker);
+  var remove = $('<span>').attr('class', 'icon is-medium p-3 trash-item')
+    .html('<i class="fa fa-trash" id="'+ticker+'-rmv"></i>');
+
+  link.append(button).append(remove);
+  $("#inner-history").append(link);
+
+  remove.on('click', function(event) {removeFromWatchlist($(event.target))});
+  button.on('click', function(event) {getStockInfo(event.target.textContent)});
+};
+
+var removeFromWatchlist = function(target) {
+  // Get parent Container and remove it
+  console.log(target)
+  console.log(target.attr('id').split('-rmv')[0])
+  var ticker = (target.attr('id').split('-rmv')[0]);
+  $('#'+ticker+'-container').remove();  
+
+  // Remove from Localstorage
+  watchList = localStorage.getItem('stock-list')
+  watchList = JSON.parse(watchList);
+  delete watchList[ticker]
+  watchList = JSON.stringify(watchList);
+  localStorage.setItem('stock-list', watchList);
+
+  // Redraw the Visualization
+  visualizeMarketCap();
+
 };
 
 var saveToLocalStorage = function() {
@@ -290,7 +315,6 @@ var loadFromLocalStorage = function() {
   if (searchHistory) {
       searchHistory = JSON.parse(searchHistory);
       for (x in searchHistory) {
-        console.log(x);
         appendToHistoryList(x)
       }
   }

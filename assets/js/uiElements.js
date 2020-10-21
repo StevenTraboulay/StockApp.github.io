@@ -40,11 +40,13 @@ function visualizeMarketCap() {
 
   var dataToDraw = treeMapDataGenerator();
 
-  if (dataToDraw === false) {return 0}
+  //Cut off further code if there's nothing to draw
+  if (dataToDraw === false) {return 0};
 
+  // Convert the data into a format usable by google visualization
   var data = google.visualization.arrayToDataTable(dataToDraw);
 
-
+  // Visual flair options
   var options =  {
     headerColor: '#f5f5f5',
     minColor: '#ff3860',
@@ -52,10 +54,9 @@ function visualizeMarketCap() {
     maxColor: '#00d1b2',
     maxColorValue: 2000000,
     headerHeight: 0,
-    fontColor: 'black',
-    showScale: true,
+    fontColor: '#363636',
     title: 'Market Cap Visualization',
-    titleTextStyle: {fontSize: '24'},
+    titleTextStyle: {color:'#363636', fontSize: '24'},
 
     // showToolTip function (hover effects)
     // https://developers.google.com/chart/interactive/docs/gallery/treemap#tooltips
@@ -63,14 +64,21 @@ function visualizeMarketCap() {
     generateTooltip: showFullTooltip
   }
 
-  tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
-
+  // tooltip HTML
   function showFullTooltip(row, size, value) {
     return '<div style="background:hsl(0, 0%, 100%); padding:1rem;">' +
     '<b>Ticker:</b> ' + data.getValue(row, 0) + '<br>'+
     '<b>Market Cap:</b> '+magnitudeIterate(size, 0) + '<br>' +
-    '<b>MarketCap to Employees ratio:</b> $'+ magnitudeIterate(data.getValue(row, 3),0) + ' per employee</div>';
+    '<b>Market Cap to Employees ratio:</b> $'+ magnitudeIterate(data.getValue(row, 3),0) + ' per employee</div>';
   }
+
+  // Make a new Treemap object at chart container
+  tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
+
+  // Disable clicking to go further down in the 'tree'
+  google.visualization.events.addListener(tree, 'select', function () {
+    tree.setSelection([]);
+  });
 
   tree.draw(data, options)
 
