@@ -27,6 +27,7 @@
      }
 .navbar > h1 {
     text-align:center;
+    user-select: none;
 }
 
 

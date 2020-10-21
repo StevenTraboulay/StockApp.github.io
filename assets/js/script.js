@@ -67,11 +67,9 @@ var getStockInfo = function (stockInput) {
           if (data['Meta Data']) {
             storeDailyData(data);
           } else {
-            console.log('Timeseries API call failed');
+            console.log('Timeseries API call failed on:', stockInput);
             console.log(data)
-            errorMessage = "Can not fetch daily change data on ticker: "+stockInput;
             stockDataContainer = {};
-            outerStockContainerCompanyNameEl.innerHTML += errorMessage+'<br><br>';
           }
         });
       } 
@@ -91,9 +89,9 @@ var getStockInfo = function (stockInput) {
             mktCapVisualize();
             saveToLocalStorage();
           } else {
-            console.log('Overview API call failed');
+            console.log('Overview API call failed on: ', stockInput);
             console.log(data)
-            errorMessage = "Can not fetch Stock Information data on ticker: "+stockInput;
+            errorMessage = "Failed to find data on ticker: "+stockInput;
             stockDataContainer = {};
             outerStockContainerCompanyNameEl.innerHTML += errorMessage+'';
             outerStockContainerNameEl.innerHTML = '<br>Please try another ticker or wait for 1 minute before trying another search. See console for details.'
@@ -164,6 +162,7 @@ var storeStockInfo = function (data) {
   var ticker = data["Symbol"];
   var desc = data["Description"];
   var sharesTotal = data['SharesOutstanding'];
+  var emp = data["FullTimeEmployees"];
 
 
   var marketCapFormatted = magnitudeIterate(marketCap, 0);
@@ -173,6 +172,7 @@ var storeStockInfo = function (data) {
   stockDataContainer.marketCapFormatted = marketCapFormatted;
   stockDataContainer.description = desc;
   stockDataContainer.SharesOutstanding = sharesTotal;
+  stockDataContainer.employees = emp;
   } else {
     // Produce Error Message
     console.log(data);
@@ -256,23 +256,32 @@ var appendToHistoryList = function (ticker) {
 var saveToLocalStorage = function() {
   var searchHistory = localStorage.getItem('stock-list')
   var name = stockDataContainer.tickerName;
+
   if (searchHistory) {
       searchHistory = JSON.parse(searchHistory);
-      if (searchHistory[name]){}
+      if (searchHistory[name]){
+        console.log(name)
+        searchHistory[name] = stockDataContainer;
+        searchHistory = JSON.stringify(searchHistory);
+        localStorage.setItem('stock-list',searchHistory);
+        visualizeMarketCap();
+      }
       else {
-      searchHistory[name] = true;
+      searchHistory[name] = stockDataContainer;
       searchHistory = JSON.stringify(searchHistory);
       localStorage.setItem('stock-list',searchHistory);
       appendToHistoryList(name);
+      visualizeMarketCap();
       }
   }
 
   else {
       searchHistory = {};
-      searchHistory[name] = true;
+      searchHistory[name] = stockDataContainer;
       searchHistory = JSON.stringify(searchHistory);
       localStorage.setItem('stock-list',searchHistory);
       appendToHistoryList(name);
+      visualizeMarketCap();
   }
 }
 
