@@ -2,8 +2,13 @@
 StockApp Project1
 
 -------------
+## Description
+
+Stockapp is a group project made by Steven, Asghar and Kumash for the University of Toronto Coding Bootcamp. The app aims to be a dashboard that displays information about the daily change in a particular ticker, and compares the size of that stock's valuation to others in your watchlist for a visual perspective on how the two (or more) companies compare in the eyes of the stock market.
+
 How To Use App
 -------------
+
 1) Launch application /  click link: https://steventraboulay.github.io/StockApp.github.io/
 2) input stock ticket symbol in search bar
 3) checks against APIs NASDAQ or NYSE database tickers
@@ -94,6 +99,7 @@ Why?: Many of us invest - some because they're told to - not really sure as to w
 LINKS
 ----------
 GITHUB: https://github.com/StevenTraboulay/StockApp.github.io
+
 Website: https://steventraboulay.github.io/StockApp.github.io/
 
 -------------
