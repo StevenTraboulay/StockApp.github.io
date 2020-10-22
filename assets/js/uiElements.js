@@ -23,7 +23,7 @@ var treeMapDataGenerator = function() {
         // See https://developers.google.com/chart/interactive/docs/gallery/treemap#data-format for details
         for (x in watchList) {
           var ratio = parseInt(watchList[x].marketCap)/parseInt(watchList[x].employees)
-          dataArr.push([watchList[x].tickerName,'Watchlisted Stocks',parseInt(watchList[x].marketCap), ratio.toFixed(2)])
+          dataArr.push([watchList[x].tickerName,'Watchlisted Stocks',parseInt(watchList[x].marketCap), parseInt(ratio)])
         }
         return [dataArr, false]
         
@@ -50,16 +50,14 @@ var treeMapDataGenerator = function() {
         minHighlightColor: '#8c6bb1',
         midHighlightColor: '#9ebcda',
         maxHighlightColor: '#edf8fb',
-        showScale: true,
         height: 500,
-        useWeightedAverageForAggregation: true,
 
         headerColor: '#f5f5f5',
         minColor: '#ff3860',
         maxColor: '#00d1b2',
         headerHeight: 0,
         fontColor: '#363636',
-        title: 'Placeholder MarketCap Visualization',
+        title: 'Placeholder',
         titleTextStyle: {color:'#363636', fontSize: '24'}
       };
       
@@ -89,16 +87,22 @@ function visualizeMarketCap() {
   // pull updated data from localstorage
   var dataToDraw = treeMapDataGenerator();
   // Visual flair options
-  var options =  {
+  var options =  {    
+    highlightOnMouseOver: true,
+    maxDepth: 1,
+    maxPostDepth: 2,
+    minHighlightColor: '#8c6bb1',
+    midHighlightColor: '#9ebcda',
+    maxHighlightColor: '#edf8fb',
+    height: 500,
+
     headerColor: '#f5f5f5',
     minColor: '#ff3860',
     maxColor: '#00d1b2',
     headerHeight: 0,
     fontColor: '#363636',
-    title: 'Market Cap Visualization',
+    title: 'Placeholder',
     titleTextStyle: {color:'#363636', fontSize: '24'},
-    showScale: true,
-    useWeightedAverageForAggregation: true,
 
     // showToolTip function (hover effects)
     // https://developers.google.com/chart/interactive/docs/gallery/treemap#tooltips
