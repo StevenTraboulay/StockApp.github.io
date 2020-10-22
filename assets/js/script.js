@@ -280,7 +280,7 @@ var appendToHistoryList = function (ticker) {
   // Setting up the link structure
   var link = $('<a>').attr('class','dropdown-item watchlist-item').attr("href","#").attr('id',ticker+'-container');
   var button = $('<span>').attr('class', 'stock-search-button').html(ticker);
-  var remove = $('<span>').attr('class', 'icon is-medium p-3 trash-item')
+  var remove = $('<a>').attr('class', 'icon is-medium p-3 trash-item').attr('id', ticker+'-padding')
               .html('<i class="fa fa-trash" id="'+ticker+'-rmv"></i>');
 
   // Adding the link to the page
@@ -288,14 +288,14 @@ var appendToHistoryList = function (ticker) {
   $("#inner-history").append(link);
 
   // attaching on-click event listeners 1 for removal, other for retreiving updated stock info for the clicked element.
-  remove.on('click', function(event) {removeFromWatchlist($(event.target))});
-  button.on('click', function(event) {getStockInfo(event.target.textContent)});
+  remove.on('click', function(event) {console.log(event); removeFromWatchlist($(event.target))});
+  button.on('click', function(event) {console.log(event); getStockInfo(event.target.textContent)});
 };
 
 // Remove the target and its parent link from the watchlist
 var removeFromWatchlist = function(target) {
   // Get parent Container and remove it
-  var ticker = (target.attr('id').split('-rmv')[0]);
+  var ticker = (target.attr('id').split('-')[0]);
   $('#'+ticker+'-container').remove();  
 
   // Remove from Localstorage

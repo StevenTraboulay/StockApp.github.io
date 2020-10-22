@@ -13,9 +13,6 @@ var treeMapDataGenerator = function() {
   var dataArr = [['Ticker', 'Parent', 'Market Cap (USD)', 'marketCap:Employees ratio'],
                ['Watchlisted Stocks',null,0,0]];
 
-  var minval = null;
-  var maxval = null;
-
   // Pull data from Localstorage
     watchList = localStorage.getItem('stock-list')
     watchList = JSON.parse(watchList);
@@ -27,17 +24,6 @@ var treeMapDataGenerator = function() {
         for (x in watchList) {
           var ratio = parseInt(watchList[x].marketCap)/parseInt(watchList[x].employees)
           dataArr.push([watchList[x].tickerName,'Watchlisted Stocks',parseInt(watchList[x].marketCap), ratio.toFixed(2)])
-
-          if (minval == null){
-            minval=maxval=ratio;
-          }else{
-            if (minval>ratio){
-              minval=ratio;
-            }if(maxval<ratio){
-              maxval=ratio;
-            }
-          }
-
         }
         return [dataArr, false]
         
@@ -112,6 +98,7 @@ function visualizeMarketCap() {
     title: 'Market Cap Visualization',
     titleTextStyle: {color:'#363636', fontSize: '24'},
     showScale: true,
+    useWeightedAverageForAggregation: true,
 
     // showToolTip function (hover effects)
     // https://developers.google.com/chart/interactive/docs/gallery/treemap#tooltips
