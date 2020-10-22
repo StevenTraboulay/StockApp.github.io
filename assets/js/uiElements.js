@@ -15,7 +15,7 @@ var treeMapDataGenerator = function() {
 
   // Pull data from Localstorage
     watchList = localStorage.getItem('stock-list')
-    watchList = JSON.parse(searchHistory);
+    watchList = JSON.parse(watchList);
     if (!(jQuery.isEmptyObject(watchList))) {
 
         // Formatting Data
@@ -25,7 +25,7 @@ var treeMapDataGenerator = function() {
           var ratio = parseInt(watchList[x].marketCap)/parseInt(watchList[x].employees)
           dataArr.push([watchList[x].tickerName,'Watchlisted Stocks',parseInt(watchList[x].marketCap), ratio.toFixed(2)])
         }
-        return setup;
+        return dataArr;
         
     } else{
       // if localstorage is empty, clear out the chart element and return false
