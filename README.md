@@ -6,6 +6,15 @@ StockApp Project1
 
 Stockapp is a group project made by Steven, Asghar and Kumash for the University of Toronto Coding Bootcamp. The app aims to be a dashboard that displays information about the daily change in a particular ticker, and compares the size of that stock's valuation to others in your watchlist for a visual perspective on how the two (or more) companies compare in the eyes of the stock market.
 
+
+## Dependencies and Technologies Used
+
+- Bulma: An opensource CSS framework
+- AlphaVantage: A free (but restricted) API for getting stock information
+- Google Charts: Used for the Market Cap Visualization
+- JQuery: QOL code, very useful for all things JS.
+- Font Awesome: icon SVGs. Search icon, dropdown and more!
+
 How To Use App
 -------------
 
