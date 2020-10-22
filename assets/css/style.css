@@ -59,6 +59,7 @@
     max-width: 80%;
     margin: auto;
     margin-top:2rem;
+    padding-bottom:1rem;
     background-color:hsl(171, 100%, 41%);
     color:white;
 }

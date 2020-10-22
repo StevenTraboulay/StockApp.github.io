@@ -90,10 +90,10 @@ var getStockInfo = function (stockInput) {
           } else {
             console.log('Overview API call failed on: ', stockInput);
             console.log(data)
-            errorMessage = "Failed to find data on ticker: "+stockInput;
+            errorMessage = "Failed to find data for ticker: "+stockInput;
             stockDataContainer = {};
-            outerStockContainerCompanyNameEl.innerHTML += errorMessage+'';
-            outerStockContainerNameEl.innerHTML = '<br>Please try another ticker or wait for 1 minute before trying another search. See console for details.'
+            outerStockContainerCompanyNameEl.innerHTML = errorMessage+'<br>';
+            $('#total-mkt-cap-comp').html('Please try another ticker or wait for 1 minute before trying another search. See console for details.')
             errorMessage = '';
           }
         });
