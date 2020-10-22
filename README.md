@@ -94,4 +94,5 @@ Website: https://steventraboulay.github.io/StockApp.github.io/
 Screenshot
 -------------
 
-![Alt text](/assets/images/xxxx.png "Screenshot")
+![Alt text](/assets/img/presearch.png "Screenshot 1")
+![Alt text](/assets/img/stocksearch.png "Screenshot 2")
