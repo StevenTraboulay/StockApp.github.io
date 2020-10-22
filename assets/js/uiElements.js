@@ -13,6 +13,9 @@ var treeMapDataGenerator = function() {
   var dataArr = [['Ticker', 'Parent', 'Market Cap (USD)', 'marketCap:Employees ratio'],
                ['Watchlisted Stocks',null,0,0]];
 
+  var minval = null;
+  var maxval = null;
+
   // Pull data from Localstorage
     watchList = localStorage.getItem('stock-list')
     watchList = JSON.parse(watchList);
@@ -24,13 +27,58 @@ var treeMapDataGenerator = function() {
         for (x in watchList) {
           var ratio = parseInt(watchList[x].marketCap)/parseInt(watchList[x].employees)
           dataArr.push([watchList[x].tickerName,'Watchlisted Stocks',parseInt(watchList[x].marketCap), ratio.toFixed(2)])
+
+          if (minval == null){
+            minval=maxval=ratio;
+          }else{
+            if (minval>ratio){
+              minval=ratio;
+            }if(maxval<ratio){
+              maxval=ratio;
+            }
+          }
+
         }
-        return dataArr;
+        return [dataArr, false]
         
     } else{
       // if localstorage is empty, clear out the chart element and return false
       $('#mkt-cap-vis-chart').html('')
-      return false;
+      var dataArr = 
+      [['Ticker', 'Parent', 'Market Cap (USD)', 'marketCap:Employees ratio'],
+      ['Gdaddy', null, 0, 0],
+      ['Mosaically arranged Stocks will show up here','Gdaddy',50,1000000],
+      ['Not Alphabetical', 'Mosaically arranged Stocks will show up here', 5, 700000],
+      ['Arranged', 'Mosaically arranged Stocks will show up here', 4, 1600000],
+      ['Stonks', 'Mosaically arranged Stocks will show up here',5, 1005000],
+      ['Placeholder', 'Mosaically arranged Stocks will show up here', 6, 2000000],
+      ['Stocks', 'Mosaically arranged Stocks will show up here', 5, 50000],
+      ['Charting', 'Mosaically arranged Stocks will show up here', 4, 250000],
+      ['Dashboards', 'Mosaically arranged Stocks will show up here', 3, 105810],
+      ['Mosaic', 'Mosaically arranged Stocks will show up here', 8, 1958101]]
+
+      var options = {
+        highlightOnMouseOver: true,
+        maxDepth: 1,
+        maxPostDepth: 2,
+        minHighlightColor: '#8c6bb1',
+        midHighlightColor: '#9ebcda',
+        maxHighlightColor: '#edf8fb',
+        showScale: true,
+        height: 500,
+        useWeightedAverageForAggregation: true,
+
+        headerColor: '#f5f5f5',
+        minColor: '#ff3860',
+        maxColor: '#00d1b2',
+        headerHeight: 0,
+        fontColor: '#363636',
+        title: 'Placeholder MarketCap Visualization',
+        titleTextStyle: {color:'#363636', fontSize: '24'}
+      };
+      
+
+      return [dataArr,options];
     }
 }
 
@@ -40,32 +88,9 @@ google.charts.setOnLoadCallback(visualizeMarketCap);
 
 // Draw treemap
 function visualizeMarketCap() {
-  // pull updated data from localstorage
-  var dataToDraw = treeMapDataGenerator();
 
-  //Cut off further code if there's nothing to draw
-  if (dataToDraw === false) {return 0};
-
-  // Convert the data into a format usable by google visualization
-  var data = google.visualization.arrayToDataTable(dataToDraw);
-
-  // Visual flair options
-  var options =  {
-    headerColor: '#f5f5f5',
-    minColor: '#ff3860',
-    minColorValue: 50000,
-    maxColor: '#00d1b2',
-    maxColorValue: 2000000,
-    headerHeight: 0,
-    fontColor: '#363636',
-    title: 'Market Cap Visualization',
-    titleTextStyle: {color:'#363636', fontSize: '24'},
-
-    // showToolTip function (hover effects)
-    // https://developers.google.com/chart/interactive/docs/gallery/treemap#tooltips
-    showTooltips: true,
-    generateTooltip: showFullTooltip
-  }
+  // Make a new Treemap object at chart container
+  tree = new google.visualization.TreeMap(document.getElementById('mkt-cap-vis-chart'));
 
   // tooltip HTML
   function showFullTooltip(row, size, value) {
@@ -75,15 +100,39 @@ function visualizeMarketCap() {
     '<b>Market Cap to Employees ratio:</b> $'+ magnitudeIterate(data.getValue(row, 3),0) + ' per employee</div>';
   }
 
-  // Make a new Treemap object at chart container
-  tree = new google.visualization.TreeMap(document.getElementById('mkt-cap-vis-chart'));
+  // pull updated data from localstorage
+  var dataToDraw = treeMapDataGenerator();
+  // Visual flair options
+  var options =  {
+    headerColor: '#f5f5f5',
+    minColor: '#ff3860',
+    maxColor: '#00d1b2',
+    headerHeight: 0,
+    fontColor: '#363636',
+    title: 'Market Cap Visualization',
+    titleTextStyle: {color:'#363636', fontSize: '24'},
+    showScale: true,
 
-  // Disable clicking to go further down in the 'tree'
+    // showToolTip function (hover effects)
+    // https://developers.google.com/chart/interactive/docs/gallery/treemap#tooltips
+    showTooltips: true,
+    generateTooltip: showFullTooltip
+  };
+
+  // Use placeholder Options if provided
+  if (dataToDraw[1]) {options=dataToDraw[1]}
+  else {  
+    // If not using placeholder tree:s
+    // Disable clicking to go further down in the 'tree'
   google.visualization.events.addListener(tree, 'select', function () {
     tree.setSelection([]);
-  });
+  });}
+
+  // Convert the data into a format usable by google visualization
+  var data = google.visualization.arrayToDataTable(dataToDraw[0]);
+
 
   // draw the data with options
-  tree.draw(data, options)
+  tree.draw(data, dataToDraw[1])
 
   }
