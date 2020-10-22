@@ -4,12 +4,12 @@ StockApp Project1
 -------------
 How To Use App
 -------------
-1) Launch application / open index / click link
+1) Launch application /  click link: https://steventraboulay.github.io/StockApp.github.io/
 2) input stock ticket symbol in search bar
 3) checks against APIs NASDAQ or NYSE database tickers
 4) correct symbol input results in displayed information consisting of: Opening day price, current price, change percentage, change in dollars and market cap
 5) an incorrect symbol input will result in displayed error.
-6) App will store last 3 stock calls to be recalled into view. 
+6) App will store last stock calls to be recalled into view. 
 
 ------------
 GROUP PROCESS
@@ -47,9 +47,10 @@ Java Scripting
 4) get market cap info  by multiplying current stock price by the outstanding shares
 5) create variables to open the openingprice, currentprice, change percentage and market cap to append into DIV
 6) append into DIV
-*** Issue came up but found fix and resolution***
+*** Issue came up but found fix and resolution**
 7) Market cap issue wasnt displaying well, was able to input a new return data point to allow it to flow through
 8) fixed the percetange returns and prolonged 0.%
+9) fixed an issue with our array dates 
 
 
 
@@ -83,6 +84,14 @@ Fix: get the last refresh time as variable and get last refreh variable but need
 
 
 
+----------
+LINKS
+----------
+GITHUB: https://github.com/StevenTraboulay/StockApp.github.io
+Website: https://steventraboulay.github.io/StockApp.github.io/
 
+-------------
+Screenshot
+-------------
 
-
+![Alt text](/assets/images/xxxx.png "Screenshot")
