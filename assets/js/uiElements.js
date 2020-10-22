@@ -1,40 +1,46 @@
-historyButton = document.querySelector('#stock-history-btn');
+// Watchlist Dropdown
+watchlistButton = document.querySelector('#stock-watchlist-btn');
 
-historyButton.addEventListener('click', function(event) {
+// toggle dropdown
+watchlistButton.addEventListener('click', function(event) {
   event.stopPropagation();
   event.preventDefault();
-  historyButton.classList.toggle('is-active');
+  watchlistButton.classList.toggle('is-active');
 });
 
 var treeMapDataGenerator = function() {
-  var setup = [['Ticker', 'Parent', 'Market Cap (USD)', 'marketCap:Employees ratio'],
+  // starting data array according to the treemap-data-format
+  var dataArr = [['Ticker', 'Parent', 'Market Cap (USD)', 'marketCap:Employees ratio'],
                ['Watchlisted Stocks',null,0,0]];
 
   // Pull data from Localstorage
-    searchHistory = localStorage.getItem('stock-list')
-    searchHistory = JSON.parse(searchHistory);
-    console.log(searchHistory);
-    if (!(jQuery.isEmptyObject(searchHistory))) {
-        // Format Data
+    watchList = localStorage.getItem('stock-list')
+    watchList = JSON.parse(searchHistory);
+    if (!(jQuery.isEmptyObject(watchList))) {
+
+        // Formatting Data
         // myRow = [ticker, empty, marketCap, numEmployees-to-marketCap]
         // See https://developers.google.com/chart/interactive/docs/gallery/treemap#data-format for details
-        for (x in searchHistory) {
-          var ratio = parseInt(searchHistory[x].marketCap)/parseInt(searchHistory[x].employees)
-          setup.push([searchHistory[x].tickerName,'Watchlisted Stocks',parseInt(searchHistory[x].marketCap), ratio.toFixed(2)])
+        for (x in watchList) {
+          var ratio = parseInt(watchList[x].marketCap)/parseInt(watchList[x].employees)
+          dataArr.push([watchList[x].tickerName,'Watchlisted Stocks',parseInt(watchList[x].marketCap), ratio.toFixed(2)])
         }
         return setup;
         
     } else{
-      $('#chart_div').html('')
+      // if localstorage is empty, clear out the chart element and return false
+      $('#mkt-cap-vis-chart').html('')
       return false;
     }
 }
 
+// Once the treemap package has been loaded, draw a graph from localstorage
 google.charts.load('current', {'packages':['treemap']});
 google.charts.setOnLoadCallback(visualizeMarketCap);
 
-
+// Draw treemap
 function visualizeMarketCap() {
+  // pull updated data from localstorage
   var dataToDraw = treeMapDataGenerator();
 
   //Cut off further code if there's nothing to draw
@@ -70,13 +76,14 @@ function visualizeMarketCap() {
   }
 
   // Make a new Treemap object at chart container
-  tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
+  tree = new google.visualization.TreeMap(document.getElementById('mkt-cap-vis-chart'));
 
   // Disable clicking to go further down in the 'tree'
   google.visualization.events.addListener(tree, 'select', function () {
     tree.setSelection([]);
   });
 
+  // draw the data with options
   tree.draw(data, options)
 
   }
