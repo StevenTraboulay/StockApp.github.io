@@ -133,6 +133,6 @@ function visualizeMarketCap() {
 
 
   // draw the data with options
-  tree.draw(data, dataToDraw[1])
+  tree.draw(data, options)
 
   }
