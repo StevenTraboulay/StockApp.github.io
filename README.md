@@ -82,6 +82,12 @@ Fix: get the last refresh time as variable and get last refreh variable but need
 4)  Erorr message weren't catching or appearing when needed
     4. the original fix was to run a catch function for when the 
 
+-------
+USER STORY
+-------
+Who?: People who have intermediate stock knowledge but not indepth, having somethign to anchor them in and make it real to them above the numbers
+What?: A stockApp that provides colour and substance while maintaining simplicity for the end user on the go (to also be expanded on in each of our future development)
+Why?: Many of us invest - some because they're told to - not really sure as to why outside. money will grow.  Creates a tangible ability to asses that growth as well as a sense of grounding and reality with the examples provide.
 
 
 ----------
