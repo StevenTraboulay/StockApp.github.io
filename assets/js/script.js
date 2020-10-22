@@ -117,9 +117,9 @@ var storeDailyData = function (data) {
     var lastDay = lastRefreshedTime.split(" ")[0];
 
     var marketOpenPrice = data["Time Series (15min)"][lastDay + " 09:45:00"]["4. close"];
-    marketOpenPrice = parseInt(marketOpenPrice).toFixed(2);
+    marketOpenPrice = parseFloat(marketOpenPrice).toFixed(2);
     var marketClosePrice = data["Time Series (15min)"][lastDay + " 16:00:00"]["4. close"];
-    marketClosePrice = parseInt(marketClosePrice).toFixed(2);
+    marketClosePrice = parseFloat(marketClosePrice).toFixed(2);
 
     //Objects.keys returns an array of all the keys from the data [time Series]
     var listOfTimes = Object.keys(data["Time Series (15min)"]);
@@ -153,10 +153,12 @@ var storeDailyData = function (data) {
     //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
     var growthPercentage = (marketClosePrice / marketOpenPrice - 1) * 100;
     growthPercentage = parseFloat(growthPercentage).toFixed(2);
+    console.log(growthPercentage)
 
     //storing the difference from currentClosePricee and dayOpeningPrice
     var absoluteGrowth = marketClosePrice - marketOpenPrice;
     absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
+    console.log(absoluteGrowth)
 
     stockDataContainer.openPrice = marketOpenPrice;
     stockDataContainer.lastPrice = marketClosePrice;
