@@ -101,7 +101,7 @@ function visualizeMarketCap() {
     maxColor: '#00d1b2',
     headerHeight: 0,
     fontColor: '#363636',
-    title: 'Placeholder',
+    title: 'Market Cap Visualization',
     titleTextStyle: {color:'#363636', fontSize: '24'},
 
     // showToolTip function (hover effects)
