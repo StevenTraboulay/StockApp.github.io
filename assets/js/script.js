@@ -85,7 +85,7 @@ var getStockInfo = function (stockInput) {
           if (stockDataContainer.openPrice && data['Symbol']) {
             storeStockInfo(data);
             rewriteStockInfo();
-            mktCapVisualize();
+            mktCapPerspective();
             saveToLocalStorage();
           } else {
             console.log('Overview API call failed on: ', stockInput);
@@ -238,24 +238,31 @@ var rewriteStockInfo = function() {
    }
 }
 
-// TODO: Add a market-cap Visualizer
-var mktCapVisualize = function() {
-  var keyword = 'gained'
+// market-cap Visualizer
+var mktCapPerspective = function() {
+
+  // if stockDataContainer.loss is true than use lost instead of gained
+  var keyword = 'gained';
   if (stockDataContainer.loss) {keyword = 'lost'}
 
+  // variables for compairson
   var medianIndividualIncome =  36400;
   var exchangeRate = 0.77;
 
+
+  // input a dollar ammount, get back its proportion to the market cap in terms of 1. total marketcap, 2. change in marketcap for the day
   var diffCalculator = function(value) {
     var totalEquivalence = stockDataContainer.marketCap / value;
     var dailyEquivalence = Math.abs(parseInt((stockDataContainer.changeAbs*stockDataContainer.SharesOutstanding)/value))
 
     return [totalEquivalence, dailyEquivalence]
   }
+
   /// mktCap / medianIndividualIncome == num of people funded for a year
   /// (dayChange*sharesOutstanding) / medianHouseholdIncome = num of people that can be funded for a year based on today's movements
   var medianIncomeComp = diffCalculator(medianIndividualIncome*exchangeRate);
 
+  // rewrite the html for the info card
   $('#mkt-cap-hdr').html("The median Canadian makes $"+medianIndividualIncome+" CAD per year (2018):");
   mktCapTot.innerHTML = stockDataContainer.tickerName +"'s valuation would be equivalent to the salary of <b>"
                         + magnitudeIterate(medianIncomeComp[0], 0) + " Canadians.</b>";
@@ -267,24 +274,27 @@ var mktCapVisualize = function() {
 
 }
 
+// adding a stock to the history dropdown
 var appendToHistoryList = function (ticker) {
-  // adds to history-list
+
+  // Setting up the link structure
   var link = $('<a>').attr('class','dropdown-item watchlist-item').attr("href","#").attr('id',ticker+'-container');
   var button = $('<span>').attr('class', 'stock-search-button').html(ticker);
   var remove = $('<span>').attr('class', 'icon is-medium p-3 trash-item')
               .html('<i class="fa fa-trash" id="'+ticker+'-rmv"></i>');
 
+  // Adding the link to the page
   link.append(button).append(remove);
   $("#inner-history").append(link);
 
+  // attaching on-click event listeners 1 for removal, other for retreiving updated stock info for the clicked element.
   remove.on('click', function(event) {removeFromWatchlist($(event.target))});
   button.on('click', function(event) {getStockInfo(event.target.textContent)});
 };
 
+// Remove the target and its parent link from the watchlist
 var removeFromWatchlist = function(target) {
   // Get parent Container and remove it
-  console.log(target)
-  console.log(target.attr('id').split('-rmv')[0])
   var ticker = (target.attr('id').split('-rmv')[0]);
   $('#'+ticker+'-container').remove();  
 
@@ -297,15 +307,17 @@ var removeFromWatchlist = function(target) {
 
   // Redraw the Visualization
   visualizeMarketCap();
-
 };
 
 var saveToLocalStorage = function() {
   var searchHistory = localStorage.getItem('stock-list')
   var name = stockDataContainer.tickerName;
-
+  
+  // if search history already exists
   if (searchHistory) {
       searchHistory = JSON.parse(searchHistory);
+      // and if search-history already has the ticker, then just update that ticker
+      // dont include timeseries because that'll make everything too big
       if (searchHistory[name]){
         console.log(name)
         searchHistory[name] = stockDataContainer;
@@ -313,6 +325,7 @@ var saveToLocalStorage = function() {
         localStorage.setItem('stock-list',searchHistory);
         visualizeMarketCap();
       }
+      // and if search-history doesnt have the ticker, then add that ticker
       else {
       searchHistory[name] = stockDataContainer;
       searchHistory = JSON.stringify(searchHistory);
@@ -323,6 +336,7 @@ var saveToLocalStorage = function() {
   }
 
   else {
+    // if search history doesnt exist make a new contianer and add the ticker
       searchHistory = {};
       searchHistory[name] = stockDataContainer;
       searchHistory = JSON.stringify(searchHistory);
@@ -332,6 +346,7 @@ var saveToLocalStorage = function() {
   }
 }
 
+// Load all data
 var loadFromLocalStorage = function() {
   searchHistory = localStorage.getItem('stock-list')
   if (searchHistory) {
@@ -341,7 +356,6 @@ var loadFromLocalStorage = function() {
       }
   }
 }
-
 loadFromLocalStorage();
 
 //On click form submit even handler
