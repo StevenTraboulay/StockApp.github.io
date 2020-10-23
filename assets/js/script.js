@@ -156,6 +156,7 @@ var storeDailyData = function (data) {
   }
   createChart(data, listOfCloseValues);
 
+
 }
 
 var createChart = function(data, listOfCloseValues){
@@ -200,6 +201,7 @@ var createChart = function(data, listOfCloseValues){
       },
         options: {}
   });
+}
 
 // function to pull and display the stock overview information
 var storeStockInfo = function (data) {
@@ -396,4 +398,4 @@ document.addEventListener("keyup", function(event) {
 
 window.onresize = visualizeMarketCap;
 
-//////////////////////////
+/////
