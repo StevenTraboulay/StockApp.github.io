@@ -101,6 +101,7 @@ var getStockInfo = function (stockInput) {
     })
 };
 
+
 var storeDailyData = function (data) {
   var content = data['Meta Data']
   // if API call succeeds
@@ -138,21 +139,21 @@ var storeDailyData = function (data) {
 
     for(var i = 0; i <= listOfCloseValues.length - 1; i++){
       var one = listOfCloseValues[i].time;
-
+  
       listOfTime.push(one);
     }
-
+  
     var listOfValues = [];
     for(var i = 0; i <= listOfCloseValues.length - 1; i++){
       var two = listOfCloseValues[i].value;
-
+  
       listOfValues.push(parseFloat(two));
     }
-
+  
     var companyNameDisplay = data["Meta Data"]["2. Symbol"]
     
     var ctx = document.getElementById('myChart').getContext('2d');
-
+  
     var chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -168,7 +169,6 @@ var storeDailyData = function (data) {
       // Configuration options go here
       options: {}
   });
-
 
     //calculations start here
     //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
