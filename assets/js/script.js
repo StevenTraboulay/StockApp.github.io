@@ -8,7 +8,7 @@ var outerStockContainerCurrentPriceEl = document.querySelector("#stock-last-pric
 var outerStockContainerChangePercentEl = document.querySelector("#stock-change-percent");
 var outerStockContainerAbsoluteEl = document.querySelector("#stock-change-absolute");
 var outerStockContainerMarketCapEl = document.querySelector("#stock-market-cap");
-
+var chart;
 var mktCapContainer = document.querySelector('#mkt-cap-vis')
 var mktCapTot = document.querySelector('#total-mkt-cap-comp')
 var mktCapDay = document.querySelector('#day-mkt-cap-comp')
@@ -105,13 +105,9 @@ var storeDailyData = function (data) {
   var content = data['Meta Data']
   // if API call succeeds
   if (content){
-    console.log('Time Series API Succeeded');
-    console.log(data);
 
     // add stuff to stockDataContainer)
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
-    //var currentClosePrice = data["Time Series (15min)"][lastRefreshedTime]["4. close"];
-    //currentClosePrice = parseFloat(currentClosePrice).toFixed(2);
     
     //last day is the date only and not the time in the entire string
     var lastDay = lastRefreshedTime.split(" ")[0];
@@ -137,17 +133,47 @@ var storeDailyData = function (data) {
       } 
     })
 
-    console.log(listOfCloseValues);
+//new chart here
+    //Start of Chart.JS visualization ************
+    var listOfTime = [];
 
-    //sorting the data returned and the default is asc alphabitcally
-    //listOfTimes.sort();
+    for(var i = 0; i <= listOfCloseValues.length - 1; i++){
+      var one = listOfCloseValues[i].time;
+      listOfTime.push(one);
+      listOfTime.sort();
+    }
+  
+    var listOfValues = [];
 
-    //returning the earliest time from the listOfTimes sort in this case the [0] array item
-    //var openingTime = listOfTimes[0];
+    for(var i = 0; i <= listOfCloseValues.length - 1; i++){
+      var two = listOfCloseValues[i].value;
+      listOfValues.push(parseFloat(two));
+    }
+  
+    var companyNameDisplay = data["Meta Data"]["2. Symbol"]
+    var upperComp = companyNameDisplay.toUpperCase();
+    
+    var ctx = document.getElementById('myChart').getContext('2d');
 
-    //getting the opening time using the opening time from the array above
-    //var dayOpeningPrice = data["Time Series (15min)"][openingTime]["4. close"];
-    //var dayOpeningPrice = parseFloat(dayOpeningPrice).toFixed(2);
+    //checks to see if chart exists, if it does destroy() is called to render new chart
+    if(chart){
+      chart.destroy()
+    }
+  
+    //render new chart
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: listOfTime,
+          datasets: [{
+              label: upperComp,
+              //backgroundColor:'rgb(148, 189, 255)',
+              borderColor: 'rgb(12, 102, 247)',
+              data: listOfValues
+          }]
+      },
+        options: {}
+  });
 
     //calculations start here
     //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
@@ -169,8 +195,8 @@ var storeDailyData = function (data) {
     } else {stockDataContainer.loss = false;}
   }else{
     // Produce Error Message
-    console.log(data);
   }
+
 }
 
 // function to pull and display the stock overview information
@@ -204,11 +230,9 @@ var storeStockInfo = function (data) {
 
 //clear containers
 var clearOut = function () {
-  console.log('Clearing Out')
   outerStockContainerEl.classList.remove("blink_text");
   outerStockContainerEl.style = '';
   mktCapContainer.style = '';
-
   outerStockContainerNameEl.textContent = "";
   outerStockContainerCompanyNameEl.textContent = "";
   outerStockContainerOpeningPriceEl.textContent = "";
@@ -224,7 +248,6 @@ var clearOut = function () {
 
 // rewrites the stock-info and its contents based on info from stockDataContainer
 var rewriteStockInfo = function() {
-  console.log('rewriting stock-info')
   outerStockContainerNameEl.textContent = stockDataContainer.tickerName;
   outerStockContainerCompanyNameEl.textContent = stockDataContainer.companyName;
   outerStockContainerOpeningPriceEl.textContent = "Opening Price: $" + stockDataContainer.openPrice;
@@ -290,8 +313,8 @@ var appendToHistoryList = function (ticker) {
   $("#inner-history").append(link);
 
   // attaching on-click event listeners 1 for removal, other for retreiving updated stock info for the clicked element.
-  remove.on('click', function(event) {console.log(event); removeFromWatchlist($(event.target))});
-  button.on('click', function(event) {console.log(event); getStockInfo(event.target.textContent)});
+  remove.on('click', function(event) {console.log(); removeFromWatchlist($(event.target))});
+  button.on('click', function(event) {console.log(); getStockInfo(event.target.textContent)});
 };
 
 // Remove the target and its parent link from the watchlist
