@@ -133,6 +133,32 @@ var storeDailyData = function (data) {
       } 
     })
 
+
+
+    //calculations start here
+    //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
+    var growthPercentage = (marketClosePrice / marketOpenPrice - 1) * 100;
+    growthPercentage = parseFloat(growthPercentage).toFixed(2);
+
+    //storing the difference from currentClosePricee and dayOpeningPrice
+    var absoluteGrowth = marketClosePrice - marketOpenPrice;
+    absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
+
+    stockDataContainer.openPrice = marketOpenPrice;
+    stockDataContainer.lastPrice = marketClosePrice;
+    stockDataContainer.changePerc = growthPercentage;
+    stockDataContainer.changeAbs = absoluteGrowth;
+    if (absoluteGrowth < 0) {
+      stockDataContainer.loss = true;
+    } else {stockDataContainer.loss = false;}
+  }else{
+    // Produce Error Message
+  }
+  createChart(data, listOfCloseValues);
+
+}
+
+var createChart = function(data, listOfCloseValues){
 //new chart here
     //Start of Chart.JS visualization ************
     var listOfTime = [];
@@ -159,7 +185,7 @@ var storeDailyData = function (data) {
     if(chart){
       chart.destroy()
     }
-  
+    Chart.defaults.global.defaultFontColor = 'white';
     //render new chart
     chart = new Chart(ctx, {
       type: 'line',
@@ -167,34 +193,13 @@ var storeDailyData = function (data) {
           labels: listOfTime,
           datasets: [{
               label: upperComp,
-              //backgroundColor:'rgb(148, 189, 255)',
+              backgroundColor:'rgb(148, 189, 255)',
               borderColor: 'rgb(12, 102, 247)',
               data: listOfValues
           }]
       },
         options: {}
   });
-
-    //calculations start here
-    //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
-    var growthPercentage = (marketClosePrice / marketOpenPrice - 1) * 100;
-    growthPercentage = parseFloat(growthPercentage).toFixed(2);
-
-    //storing the difference from currentClosePricee and dayOpeningPrice
-    var absoluteGrowth = marketClosePrice - marketOpenPrice;
-    absoluteGrowth = parseFloat(absoluteGrowth).toFixed(2);
-
-    stockDataContainer.openPrice = marketOpenPrice;
-    stockDataContainer.lastPrice = marketClosePrice;
-    stockDataContainer.changePerc = growthPercentage;
-    stockDataContainer.changeAbs = absoluteGrowth;
-    if (absoluteGrowth < 0) {
-      stockDataContainer.loss = true;
-    } else {stockDataContainer.loss = false;}
-  }else{
-    // Produce Error Message
-  }
-
 }
 
 // function to pull and display the stock overview information
