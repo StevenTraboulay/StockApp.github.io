@@ -55,6 +55,9 @@
             <div id='stock-change-percent'></div>
             <div id='stock-change-absolute'></div>
             <div id='stock-market-cap'></div>
+            <div id="canvasContainer" style="width: 100%; background-color: white;">
+              <canvas id="myChart"></canvas>
+            </div>
         </div>
 
 
@@ -65,6 +68,9 @@
         </div>
 
         <div id="mkt-cap-vis-chart" style="width: 80%; height: 35rem; margin:2rem auto;"></div>
+        
+     <!-- was here before -->
+        
 
       </body>
       <footer class="footer">
@@ -81,6 +87,7 @@
           </p>
         </div>
       </footer>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
       <script src="./assets/js/currency.min.js"></script>
