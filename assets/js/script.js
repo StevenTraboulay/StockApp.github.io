@@ -8,7 +8,7 @@ var outerStockContainerCurrentPriceEl = document.querySelector("#stock-last-pric
 var outerStockContainerChangePercentEl = document.querySelector("#stock-change-percent");
 var outerStockContainerAbsoluteEl = document.querySelector("#stock-change-absolute");
 var outerStockContainerMarketCapEl = document.querySelector("#stock-market-cap");
-
+var chart;
 var mktCapContainer = document.querySelector('#mkt-cap-vis')
 var mktCapTot = document.querySelector('#total-mkt-cap-comp')
 var mktCapDay = document.querySelector('#day-mkt-cap-comp')
@@ -101,7 +101,6 @@ var getStockInfo = function (stockInput) {
     })
 };
 
-
 var storeDailyData = function (data) {
   var content = data['Meta Data']
   // if API call succeeds
@@ -134,40 +133,46 @@ var storeDailyData = function (data) {
       } 
     })
 
+//new chart here
     //Start of Chart.JS visualization ************
     var listOfTime = [];
 
     for(var i = 0; i <= listOfCloseValues.length - 1; i++){
       var one = listOfCloseValues[i].time;
-  
       listOfTime.push(one);
+      listOfTime.sort();
     }
   
     var listOfValues = [];
+
     for(var i = 0; i <= listOfCloseValues.length - 1; i++){
       var two = listOfCloseValues[i].value;
-  
       listOfValues.push(parseFloat(two));
     }
   
     var companyNameDisplay = data["Meta Data"]["2. Symbol"]
+    var upperComp = companyNameDisplay.toUpperCase();
     
     var ctx = document.getElementById('myChart').getContext('2d');
+
+    //checks to see if chart exists, if it does destroy() is called to render new chart
+    if(chart){
+      chart.destroy()
+    }
   
-    var chart = new Chart(ctx, {
+    //render new chart
+    chart = new Chart(ctx, {
       type: 'line',
       data: {
           labels: listOfTime,
           datasets: [{
-              label: companyNameDisplay,
-              backgroundColor: 'rgb(255, 99, 132)',
-              borderColor: 'rgb(255, 99, 132)',
+              label: upperComp,
+              //backgroundColor:'rgb(148, 189, 255)',
+              borderColor: 'rgb(12, 102, 247)',
               data: listOfValues
           }]
       },
-  
-      // Configuration options go here
-      options: {}
+        options: {}
   });
 
     //calculations start here
@@ -189,6 +194,7 @@ var storeDailyData = function (data) {
   }else{
     // Produce Error Message
   }
+
 }
 
 // function to pull and display the stock overview information
