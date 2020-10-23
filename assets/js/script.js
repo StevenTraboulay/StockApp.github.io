@@ -87,6 +87,7 @@ var getStockInfo = function (stockInput) {
             rewriteStockInfo();
             mktCapPerspective();
             saveToLocalStorage();
+            createChart(stockDataContainer.timeSeries, stockDataContainer.listOfCloseValues);
           } else {
             console.log('Overview API call failed on: ', stockInput);
             console.log(data)
@@ -151,11 +152,11 @@ var storeDailyData = function (data) {
     if (absoluteGrowth < 0) {
       stockDataContainer.loss = true;
     } else {stockDataContainer.loss = false;}
+    stockDataContainer.timeSeries = data;
+    stockDataContainer.listOfCloseValues = listOfCloseValues;
   }else{
     // Produce Error Message
   }
-  createChart(data, listOfCloseValues);
-
 
 }
 
@@ -183,9 +184,7 @@ var createChart = function(data, listOfCloseValues){
     var ctx = document.getElementById('myChart').getContext('2d');
 
     //checks to see if chart exists, if it does destroy() is called to render new chart
-    if(chart){
-      chart.destroy()
-    }
+
     Chart.defaults.global.defaultFontColor = 'white';
     //render new chart
     chart = new Chart(ctx, {
@@ -244,7 +243,9 @@ var clearOut = function () {
   outerStockContainerChangePercentEl.textContent = "";
   outerStockContainerAbsoluteEl.textContent = "";
   outerStockContainerMarketCapEl.textContent = "";
-
+  if(chart){
+    chart.destroy()
+  }
   $('#mkt-cap-hdr').html("");
   mktCapTot.textContent = "";
   mktCapDay.textContent = "";
@@ -398,4 +399,4 @@ document.addEventListener("keyup", function(event) {
 
 window.onresize = visualizeMarketCap;
 
-/////
+///////////////////
