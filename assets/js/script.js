@@ -36,12 +36,10 @@ var magnitudeIterate = function (val, counter) {
   }
 };
 
-
 //This executes when the event listener kicks off to handle the button click
 var formSubmitHandler = function (event) {
   event.preventDefault();
   var stockInput = document.querySelector("#stock-input").value.trim();
-  console.log('Fetching Data for: ',stockInput);
   if (stockInput) {
     getStockInfo(stockInput);
   } else {
@@ -66,15 +64,12 @@ var getStockInfo = function (stockInput) {
           if (data['Meta Data']) {
             storeDailyData(data);
           } else {
-            console.log('Timeseries API call failed on:', stockInput);
-            console.log(data)
             stockDataContainer = {};
           }
         });
       } 
       else {
-        console.log('this should cause the chain to break');
-        ;
+        ; //why is this here?
       }
       return fetch(overview);
     })
@@ -89,8 +84,6 @@ var getStockInfo = function (stockInput) {
             saveToLocalStorage();
             createChart(stockDataContainer.timeSeries, stockDataContainer.listOfCloseValues);
           } else {
-            console.log('Overview API call failed on: ', stockInput);
-            console.log(data)
             errorMessage = "Failed to find data for ticker: "+stockInput;
             stockDataContainer = {};
             outerStockContainerCompanyNameEl.innerHTML = errorMessage+'<br>';
@@ -107,7 +100,7 @@ var storeDailyData = function (data) {
   // if API call succeeds
   if (content){
 
-    // add stuff to stockDataContainer)
+    // add stuff to stockDataContainer
     var lastRefreshedTime = data["Meta Data"]["3. Last Refreshed"];
     
     //last day is the date only and not the time in the entire string
@@ -134,8 +127,6 @@ var storeDailyData = function (data) {
       } 
     })
 
-
-
     //calculations start here
     //storing the percentage growth from the currentClosePrice and the dayOpeningPrice from above
     var growthPercentage = (marketClosePrice / marketOpenPrice - 1) * 100;
@@ -161,7 +152,6 @@ var storeDailyData = function (data) {
 }
 
 var createChart = function(data, listOfCloseValues){
-//new chart here
     //Start of Chart.JS visualization ************
     var listOfTime = [];
 
@@ -207,7 +197,6 @@ var storeStockInfo = function (data) {
 
   // if API call succeeds
   if (data.Symbol){
-    console.log('Overview API Succeeded')
   
   // Could add in things like description, PE, exchange, others from here
   var marketCap = data.MarketCapitalization;
@@ -228,12 +217,10 @@ var storeStockInfo = function (data) {
   stockDataContainer.employees = emp;
   } else {
     // Produce Error Message
-    console.log(data);
 }};
 
 //clear containers
 var clearOut = function () {
-  outerStockContainerEl.classList.remove("blink_text");
   outerStockContainerEl.style = '';
   mktCapContainer.style = '';
   outerStockContainerNameEl.textContent = "";
@@ -300,8 +287,6 @@ var mktCapPerspective = function() {
                        medianIncomeComp[1]+" Canadians income</b> worth of value "
                         +keyword+'. In real dollars, that would be <b>$'+
                         magnitudeIterate(medianIncomeComp[1]*medianIndividualIncome, 0)+'</b>.';
-  
-
 }
 
 // adding a stock to the history dropdown
@@ -349,7 +334,6 @@ var saveToLocalStorage = function() {
       // and if search-history already has the ticker, then just update that ticker
       // dont include timeseries because that'll make everything too big
       if (searchHistory[name]){
-        console.log(name)
         searchHistory[name] = stockDataContainer;
         searchHistory = JSON.stringify(searchHistory);
         localStorage.setItem('stock-list',searchHistory);
@@ -399,4 +383,4 @@ document.addEventListener("keyup", function(event) {
 
 window.onresize = visualizeMarketCap;
 
-///////////////////
+///////////////////end
