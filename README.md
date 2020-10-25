@@ -79,17 +79,17 @@ ISSUES
 1. cannot pull price from the API in the way we want as it pulls the price open and close for that moment in time.
 Fix: get the last refresh time as variable and get last refresh variable but need to get day open price
 (note: don't hardcode the query name)
-       - need to mathematically determine which one was the earliest one in the day
-       - get the last refreshed time create that variable which is pulled from API.
-       - then get current closed price variable which is returned data using last refreshed time
-       - create a variable list of times data array using Object.keys
-       - use .sort fort he listoftimes variable
-       - create a new variable called openingTime = listofTimes[0]; which allows us to start from the beginning of the array 
-       - created a new variable to get open stock price by using open time
-       - created growth and percentage variables based of open stock price and percentage
+- need to mathematically determine which one was the earliest one in the day
+- get the last refreshed time create that variable which is pulled from API.
+- then get current closed price variable which is returned data using last refreshed time
+- create a variable list of times data array using Object.keys
+- use .sort fort he listoftimes variable
+- create a new variable called openingTime = listofTimes[0]; which allows us to start from the beginning of the array 
+- created a new variable to get open stock price by using open time
+- created growth and percentage variables based of open stock price and percentage
 2. API Problem:
-        - the API is limited to 5 calls every 5 mins. and 500 calls a day.
-        - the work around for this is to limit your calls. please be cognizant of this. 
+- the API is limited to 5 calls every 5 mins. and 500 calls a day.
+- the work around for this is to limit your calls. please be cognizant of this. 
 
 3. Market Cap value was not coming back with a usable value, or if it did it was too long of a number.
     -  there needed to be a return object in the if statement. 
